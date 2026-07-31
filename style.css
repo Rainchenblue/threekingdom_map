@@ -129,6 +129,10 @@ body {
 }
 
 .marker .label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
   margin-top: 2px;
   padding: 2px 7px;
   font-size: 12px;
