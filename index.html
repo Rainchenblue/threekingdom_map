@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>三國地圖 · 兵裝據點</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>三國兵裝據點地圖</h1>
+    <div class="header-status" id="status"></div>
+    <button id="resetBtn" class="reset-btn" title="清除選取與高亮">重設</button>
+  </header>
+
+  <main class="layout">
+    <section class="map-panel">
+      <div class="map-wrap" id="mapWrap">
+        <img id="mapImg" src="assets/map.svg" alt="三國地圖">
+        <div id="markersLayer"></div>
+        <div id="popup" class="popup hidden"></div>
+        <div class="legend">
+          <span class="legend-dot match"></span>可製造
+          <span class="legend-dot dim"></span>不可製造
+        </div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <h2>兵裝清單</h2>
+        <p class="hint">點擊兵裝名稱 → 地圖高亮可製造的據點<br>點擊據點 → 查看該處可造兵裝與材料</p>
+      </div>
+      <ul id="itemList"></ul>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+:root {
+  --bg: #14161c;
+  --panel: #1d2129;
+  --panel-2: #232833;
+  --border: #343b49;
+  --text: #e8e3d8;
+  --text-dim: #8a867d;
+  --gold: #d9a441;
+  --red: #c0423a;
+  --green: #4caf72;
+  --blue: #4a90d9;
+  --purple: #9a6bd1;
+  --cyan: #37b9a5;
+  --brown: #b07a4a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 18px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header h1 {
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: var(--gold);
+}
+
+.header-status {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.reset-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel-2);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.reset-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+.layout {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.map-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow: auto;
+}
+
+/* 地圖容器比例需與圖片一致（目前 16:9）。換成正式地圖時，請將
+   aspect-ratio 改為新圖的寬高比，例如 4:3 -> aspect-ratio: 4 / 3。 */
+.map-wrap {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: min(100%, calc((100vh - 120px) * 16 / 9));
+  min-width: 640px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.map-wrap img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#markersLayer { position: absolute; inset: 0; pointer-events: none; }
+
+.marker {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: opacity 0.25s, filter 0.25s, transform 0.25s;
+}
+
+.marker .pin {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: radial-gradient(circle at 32% 30%, #e0655a, var(--red) 55%, #8f2c26);
+  border: 2px solid #f2e2c4;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marker .pin span {
+  transform: rotate(45deg);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.marker .label {
+  margin-top: 2px;
+  padding: 2px 7px;
+  font-size: 12px;
+  color: #fff;
+  background: rgba(20, 22, 28, 0.82);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.marker:hover { z-index: 3; }
+.marker:hover .pin { box-shadow: 0 0 0 3px rgba(217, 164, 65, 0.55), 0 3px 8px rgba(0,0,0,.5); }
+
+.marker.selected { z-index: 4; }
+.marker.selected .pin { background: radial-gradient(circle at 32% 30%, #f0c46a, var(--gold) 55%, #a3701d); }
+.marker.selected .label { background: rgba(217, 164, 65, 0.95); color: #1d1403; }
+
+.marker.match { transform: translate(-50%, -100%) scale(1.12); z-index: 2; }
+.marker.match .pin { box-shadow: 0 0 0 3px rgba(76, 175, 114, 0.7), 0 3px 8px rgba(0,0,0,.5); }
+
+.marker.dim {
+  opacity: 0.22;
+  filter: grayscale(1);
+  pointer-events: auto;
+  cursor: default;
+}
+
+.legend {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--text-dim);
+  background: rgba(20, 22, 28, 0.8);
+  border-radius: 6px;
+}
+
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+.legend-dot.match { background: var(--green); box-shadow: 0 0 6px var(--green); }
+.legend-dot.dim { background: #555; }
+
+.popup {
+  position: absolute;
+  z-index: 5;
+  width: 260px;
+  background: var(--panel);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.popup.hidden { display: none; }
+
+.popup .popup-head {
+  padding: 10px 14px;
+  background: var(--panel-2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup .popup-head .name { font-size: 15px; font-weight: 700; color: var(--gold); }
+.popup .popup-close {
+  border: none;
+  background: none;
+  color: var(--text-dim);
+  font-size: 16px;
+  cursor: pointer;
+}
+.popup .popup-close:hover { color: var(--text); }
+
+.popup .popup-body { padding: 10px 14px; max-height: 40vh; overflow: auto; }
+.popup .popup-sub { font-size: 12px; color: var(--text-dim); margin-bottom: 8px; }
+
+.popup .popup-item {
+  padding: 7px 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 7px;
+  background: var(--panel-2);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.popup .popup-item:hover { border-color: var(--gold); }
+.popup .popup-item .row1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.popup .popup-item .row1 .iname { font-size: 14px; font-weight: 600; }
+.popup .popup-item .row1 .mat-count { font-size: 11px; color: var(--text-dim); }
+
+.materials { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.mat-chip {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.mat-chip.mat-鐵 { color: var(--blue); border-color: rgba(74, 144, 217, 0.5); }
+.mat-chip.mat-高級鐵 { color: var(--cyan); border-color: rgba(55, 185, 165, 0.5); }
+.mat-chip.mat-皮 { color: var(--brown); border-color: rgba(176, 122, 74, 0.5); }
+.mat-chip.mat-高級皮 { color: #e0a65a; border-color: rgba(224, 166, 90, 0.5); }
+.mat-chip.mat-木 { color: var(--green); border-color: rgba(76, 175, 114, 0.5); }
+.mat-chip.mat-高級木 { color: #7ee08a; border-color: rgba(126, 224, 138, 0.5); }
+
+.sidebar {
+  width: 340px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+}
+
+.sidebar-head { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); }
+.sidebar-head h2 { font-size: 15px; color: var(--gold); margin-bottom: 6px; }
+.sidebar-head .hint { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+
+#itemList { list-style: none; flex: 1; overflow: auto; padding: 10px; }
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background: var(--panel-2);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.item-row:hover { border-color: var(--gold); }
+
+.item-row .badge {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.item-row .info { flex: 1; min-width: 0; }
+.item-row .info .iname { font-size: 14px; font-weight: 600; }
+.item-row .info .iloc { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+.item-row.active {
+  border-color: var(--gold);
+  background: rgba(217, 164, 65, 0.12);
+}
+
+.item-row.available {
+  border-color: var(--green);
+  background: rgba(76, 175, 114, 0.08);
+}
+
+.item-row.flash { animation: flash 0.6s ease; }
+@keyframes flash {
+  0%, 100% { background: var(--panel-2); }
+  50% { background: rgba(217, 164, 65, 0.35); }
+}
+
+.badge-0 { background: #4a90d9; }
+.badge-1 { background: #e0673d; }
+.badge-2 { background: #7a5cc2; }
+.badge-3 { background: #2f9e83; }
+.badge-4 { background: #c0423a; }
+.badge-5 { background: #b07a4a; }
+.badge-6 { background: #5a7d2f; }
+.badge-7 { background: #3d6bb0; }
+.badge-8 { background: #a84a9e; }
+.badge-9 { background: #566573; }
+
+@media (max-width: 900px) {
+  .layout { flex-direction: column; overflow: auto; }
+  .map-wrap { width: 100%; min-width: 0; }
+  .sidebar { width: 100%; border-left: none; border-top: 1px solid var(--border); }
+  .popup { max-width: 80vw; }
+}
