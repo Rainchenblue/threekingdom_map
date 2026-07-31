@@ -61,6 +61,7 @@
   <span class="count" id="count">0 個標點</span>
   <span class="spacer"></span>
   <button id="resetViewBtn">重設視圖</button>
+  <button id="one2oneBtn">1:1</button>
   <button id="zinBtn">＋</button>
   <button id="zoutBtn">－</button>
   <span class="zoomlabel" id="zoomLabel">100%</span>
@@ -330,6 +331,13 @@ document.getElementById('loadCandBtn').addEventListener('click', () => {
 });
 
 document.getElementById('resetViewBtn').addEventListener('click', () => centerMap());
+
+document.getElementById('one2oneBtn').addEventListener('click', () => {
+  scale = 1;
+  applyScale();
+  viewport.scrollLeft = Math.max(0, (stage.clientWidth - viewport.clientWidth) / 2);
+  viewport.scrollTop = Math.max(0, (stage.clientHeight - viewport.clientHeight) / 2);
+});
 
 const jsonIn = document.getElementById('jsonIn');
 document.getElementById('importBtn').addEventListener('click', () => {
