@@ -60,6 +60,7 @@
   <button id="clearBtn" class="danger">清除全部</button>
   <span class="count" id="count">0 個標點</span>
   <span class="spacer"></span>
+  <button id="resetViewBtn">重設視圖</button>
   <button id="zinBtn">＋</button>
   <button id="zoutBtn">－</button>
   <span class="zoomlabel" id="zoomLabel">100%</span>
@@ -86,6 +87,14 @@
         <button id="delBtn" class="danger" disabled>刪除此標點</button>
         <button id="centerBtn" disabled>地圖跳到這點</button>
       </div>
+    </section>
+    <section>
+      <h2>匯入 markers.json</h2>
+      <textarea id="jsonIn" placeholder='貼上 {"markers": [...]} 後按「匯入並替換」'></textarea>
+      <div class="btn-row">
+        <button id="importBtn" class="primary">匯入並替換標點</button>
+      </div>
+      <p class="coord-row" style="margin-top:6px">建議先按「重設視圖」用 100% 檢視再微調。</p>
     </section>
     <section>
       <h2>匯出 markers.json</h2>
@@ -317,6 +326,32 @@ document.getElementById('loadCandBtn').addEventListener('click', () => {
     if (!confirm('已有標點，載入候選位置會直接加入，確定？')) return;
   }
   for (const [x, y] of CANDIDATES) addMarker(x, y);
+});
+
+document.getElementById('resetViewBtn').addEventListener('click', () => centerMap());
+
+const jsonIn = document.getElementById('jsonIn');
+document.getElementById('importBtn').addEventListener('click', () => {
+  try {
+    const d = JSON.parse(jsonIn.value);
+    if (!Array.isArray(d.markers)) throw new Error('缺少 markers 陣列');
+    if (markers.length && !confirm('匯入會取代目前的標點，確定？')) return;
+    overlay.innerHTML = '';
+    markers = d.markers.map(m => ({ id: m.id, name: m.name || '', x: Number(m.x), y: Number(m.y), el: null }));
+    nextId = markers.reduce((a, m) => Math.max(a, parseInt(m.id.slice(1)) + 1), 1);
+    refreshAll();
+    saveState();
+    centerMap();
+    selected = null;
+    nameInput.value = '';
+    nameInput.disabled = true;
+    delBtn.disabled = true;
+    centerBtn.disabled = true;
+    editCoord.textContent = '未選取標點';
+    updateCount();
+  } catch (e) {
+    alert('JSON 格式錯誤：' + e.message);
+  }
 });
 
 document.getElementById('clearBtn').addEventListener('click', () => {
