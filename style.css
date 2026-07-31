@@ -81,7 +81,10 @@ body {
   justify-content: safe center;
   overflow: auto;
   padding: 16px;
+  cursor: grab;
 }
+
+.map-viewport.dragging { cursor: grabbing; }
 
 /* 地圖容器比例需與圖片一致（目前 map.png = 1122 x 771）。換成正式地圖時，請將
    aspect-ratio 改為新圖的寬高比，例如 4:3 -> aspect-ratio: 4 / 3。 */
@@ -192,7 +195,7 @@ body {
   bottom: 12px;
   display: flex;
   gap: 6px;
-  z-index: 4;
+  z-index: 20;
 }
 
 .zoom-controls button {
@@ -207,6 +210,9 @@ body {
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   transition: border-color 0.15s, color 0.15s;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
 .zoom-controls button:hover { border-color: var(--gold); color: var(--gold); }
@@ -364,7 +370,11 @@ body {
     max-width: 360px;
   }
   .popup .popup-body { max-height: 50vh; }
-  .zoom-controls { right: 8px; bottom: 8px; }
+  .zoom-controls {
+    right: 8px;
+    top: calc(8px + env(safe-area-inset-top, 0px));
+    bottom: auto;
+  }
   .zoom-controls button { width: 38px; height: 38px; }
   .legend { font-size: 11px; padding: 5px 10px; }
 }

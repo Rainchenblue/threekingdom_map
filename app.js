@@ -310,6 +310,49 @@ zoomInBtn.addEventListener("click", () => applyZoom(state.zoom * 1.25, true));
 zoomOutBtn.addEventListener("click", () => applyZoom(state.zoom / 1.25, true));
 zoomResetBtn.addEventListener("click", resetZoom);
 
+let dragState = null;
+
+mapViewport.addEventListener("mousedown", (e) => {
+  if (e.button !== 0) return;
+  dragState = {
+    x: e.clientX,
+    y: e.clientY,
+    sl: mapViewport.scrollLeft,
+    st: mapViewport.scrollTop,
+    moved: false,
+  };
+  e.preventDefault();
+});
+
+window.addEventListener("mousemove", (e) => {
+  if (!dragState) return;
+  const dx = e.clientX - dragState.x;
+  const dy = e.clientY - dragState.y;
+  if (!dragState.moved && Math.hypot(dx, dy) > 4) {
+    dragState.moved = true;
+    mapViewport.classList.add("dragging");
+  }
+  if (dragState.moved) {
+    mapViewport.scrollLeft = dragState.sl - dx;
+    mapViewport.scrollTop = dragState.st - dy;
+  }
+});
+
+window.addEventListener("mouseup", () => {
+  if (dragState && dragState.moved) {
+    mapViewport.addEventListener(
+      "click",
+      (ev) => {
+        ev.stopImmediatePropagation();
+        ev.preventDefault();
+      },
+      { capture: true, once: true }
+    );
+  }
+  if (dragState) mapViewport.classList.remove("dragging");
+  dragState = null;
+});
+
 mapViewport.addEventListener("scroll", () => {
   if (state.selectedMarkerId && !isMobile()) {
     const m = state.markers.find((x) => x.id === state.selectedMarkerId);
