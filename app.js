@@ -6,14 +6,23 @@ const state = {
   markers: [],
   selectedMarkerId: null,
   activeFilter: null,
+  zoom: 1,
+  baseW: null,
 };
 
+const mapPanel = document.querySelector(".map-panel");
+const mapViewport = document.getElementById("mapViewport");
 const mapWrap = document.getElementById("mapWrap");
 const markersLayer = document.getElementById("markersLayer");
 const itemList = document.getElementById("itemList");
 const popup = document.getElementById("popup");
 const statusEl = document.getElementById("status");
 const resetBtn = document.getElementById("resetBtn");
+const zoomInBtn = document.getElementById("zoomInBtn");
+const zoomOutBtn = document.getElementById("zoomOutBtn");
+const zoomResetBtn = document.getElementById("zoomResetBtn");
+
+const isMobile = () => window.matchMedia("(max-width: 900px)").matches;
 
 init();
 
@@ -234,21 +243,79 @@ function hidePopup() {
   popup.classList.add("hidden");
 }
 
+function computeBaseW() {
+  mapWrap.style.width = "";
+  state.baseW = mapWrap.clientWidth;
+}
+
+function applyZoom(z, keepCenter) {
+  if (!state.baseW) computeBaseW();
+  const prevW = state.baseW * state.zoom;
+  state.zoom = Math.min(3, Math.max(0.5, z));
+  const newW = state.baseW * state.zoom;
+
+  if (keepCenter) {
+    const vw = mapViewport.clientWidth;
+    const vh = mapViewport.clientHeight;
+    const prevH = prevW * (771 / 1122);
+    const newH = newW * (771 / 1122);
+    const offXBefore = Math.max(16, (vw - prevW) / 2);
+    const offXAfter = Math.max(16, (vw - newW) / 2);
+    const offYBefore = Math.max(16, (vh - prevH) / 2);
+    const offYAfter = Math.max(16, (vh - newH) / 2);
+    const u = mapViewport.scrollLeft + vw / 2 - offXBefore;
+    const v = mapViewport.scrollTop + vh / 2 - offYBefore;
+    mapViewport.scrollLeft = u + offXAfter - vw / 2;
+    mapViewport.scrollTop = v + offYAfter - vh / 2;
+  }
+
+  mapWrap.style.width = newW + "px";
+  if (state.selectedMarkerId) {
+    const m = state.markers.find((x) => x.id === state.selectedMarkerId);
+    if (m) positionPopup(m);
+  }
+}
+
+function resetZoom() {
+  state.zoom = 1;
+  computeBaseW();
+  mapWrap.style.width = state.baseW + "px";
+  mapViewport.scrollLeft = 0;
+  mapViewport.scrollTop = 0;
+  if (state.selectedMarkerId) {
+    const m = state.markers.find((x) => x.id === state.selectedMarkerId);
+    if (m) positionPopup(m);
+  }
+}
+
 function positionPopup(marker) {
-  const rect = mapWrap.getBoundingClientRect();
-  const x = (marker.x / 100) * rect.width;
-  const y = (marker.y / 100) * rect.height;
+  if (isMobile()) return;
+  const wrapRect = mapWrap.getBoundingClientRect();
+  const panelRect = mapPanel.getBoundingClientRect();
+  const x = (marker.x / 100) * wrapRect.width + (wrapRect.left - panelRect.left);
+  const y = (marker.y / 100) * wrapRect.height + (wrapRect.top - panelRect.top);
   const pw = popup.offsetWidth;
   const ph = popup.offsetHeight;
 
   let left = x + 24;
   let top = y - ph - 10;
-  if (left + pw > rect.width - 10) left = x - pw - 24;
+  if (left + pw > panelRect.width - 10) left = x - pw - 24;
   if (left < 10) left = 10;
   if (top < 10) top = y + 26;
   popup.style.left = left + "px";
   popup.style.top = top + "px";
 }
+
+zoomInBtn.addEventListener("click", () => applyZoom(state.zoom * 1.25, true));
+zoomOutBtn.addEventListener("click", () => applyZoom(state.zoom / 1.25, true));
+zoomResetBtn.addEventListener("click", resetZoom);
+
+mapViewport.addEventListener("scroll", () => {
+  if (state.selectedMarkerId && !isMobile()) {
+    const m = state.markers.find((x) => x.id === state.selectedMarkerId);
+    if (m) positionPopup(m);
+  }
+});
 
 mapWrap.addEventListener("click", (e) => {
   if (e.target === mapWrap || e.target.id === "mapImg") {
@@ -262,6 +329,9 @@ resetBtn.addEventListener("click", () => {
 });
 
 window.addEventListener("resize", () => {
+  if (isMobile()) return;
+  computeBaseW();
+  applyZoom(state.zoom, false);
   if (state.selectedMarkerId) {
     const m = state.markers.find((x) => x.id === state.selectedMarkerId);
     if (m) positionPopup(m);

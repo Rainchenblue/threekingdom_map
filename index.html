@@ -15,15 +15,22 @@
 
   <main class="layout">
     <section class="map-panel">
-      <div class="map-wrap" id="mapWrap">
-        <img id="mapImg" src="assets/map.png" alt="三國地圖">
-        <div id="markersLayer"></div>
-        <div id="popup" class="popup hidden"></div>
-        <div class="legend">
-          <span class="legend-dot match"></span>可製造
-          <span class="legend-dot dim"></span>不可製造
+      <div class="map-viewport" id="mapViewport">
+        <div class="map-wrap" id="mapWrap">
+          <img id="mapImg" src="assets/map.png" alt="三國地圖">
+          <div id="markersLayer"></div>
         </div>
       </div>
+      <div class="legend">
+        <span class="legend-dot match"></span>可製造
+        <span class="legend-dot dim"></span>不可製造
+      </div>
+      <div class="zoom-controls">
+        <button id="zoomOutBtn" title="縮小">−</button>
+        <button id="zoomResetBtn" title="重置縮放">100%</button>
+        <button id="zoomInBtn" title="放大">＋</button>
+      </div>
+      <div id="popup" class="popup hidden"></div>
     </section>
 
     <aside class="sidebar">
