@@ -75,12 +75,12 @@ body {
   overflow: auto;
 }
 
-/* 地圖容器比例需與圖片一致（目前 16:9）。換成正式地圖時，請將
+/* 地圖容器比例需與圖片一致（目前 map.png = 1122 x 771）。換成正式地圖時，請將
    aspect-ratio 改為新圖的寬高比，例如 4:3 -> aspect-ratio: 4 / 3。 */
 .map-wrap {
   position: relative;
-  aspect-ratio: 16 / 9;
-  width: min(100%, calc((100vh - 120px) * 16 / 9));
+  aspect-ratio: 1122 / 771;
+  width: min(100%, calc((100vh - 120px) * 1122 / 771));
   min-width: 640px;
   border: 1px solid var(--border);
   border-radius: 8px;
