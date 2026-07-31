@@ -48,28 +48,17 @@ function renderSidebar() {
     itemList.appendChild(li);
     return;
   }
-  state.items.forEach((it, idx) => {
+  state.items.forEach((it) => {
     const li = document.createElement("li");
     li.className = "item-row";
     li.dataset.itemId = it.id;
+    li.title = it.name;
 
-    const badge = document.createElement("div");
-    badge.className = "badge badge-" + (idx % 10);
-    badge.textContent = it.id;
-
-    const info = document.createElement("div");
-    info.className = "info";
-    const nameEl = document.createElement("div");
-    nameEl.className = "iname";
-    nameEl.textContent = it.name;
-    const locEl = document.createElement("div");
-    locEl.className = "iloc";
-    locEl.textContent = "可於 " + locationCount(it.id) + " 個據點製造";
-    info.appendChild(nameEl);
-    info.appendChild(locEl);
-
-    li.appendChild(badge);
-    li.appendChild(info);
+    const img = document.createElement("img");
+    img.className = "item-img";
+    img.src = it.image;
+    img.alt = it.name;
+    li.appendChild(img);
 
     li.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -210,7 +199,7 @@ function showPopup(marker) {
     row1.className = "row1";
     const iname = document.createElement("div");
     iname.className = "iname";
-    iname.textContent = "兵裝 " + it.id + " · " + it.name;
+    iname.textContent = it.name;
     const count = document.createElement("div");
     count.className = "mat-count";
     count.textContent = "材料 " + Object.keys(it.materials).length + " 種";
