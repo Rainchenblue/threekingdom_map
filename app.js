@@ -81,7 +81,6 @@ function renderSidebar() {
 
 function renderMarkers() {
   markersLayer.innerHTML = "";
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   state.markers.forEach((m, idx) => {
     const div = document.createElement("div");
     div.className = "marker";
@@ -91,9 +90,6 @@ function renderMarkers() {
 
     const pin = document.createElement("div");
     pin.className = "pin";
-    const span = document.createElement("span");
-    span.textContent = alphabet[idx % 26];
-    pin.appendChild(span);
 
     const label = document.createElement("div");
     label.className = "label";
