@@ -270,6 +270,15 @@ body {
 
 .item-row:hover { border-color: var(--gold); }
 
+.item-row.empty-hint {
+  cursor: default;
+  color: var(--text-dim);
+  font-size: 13px;
+  justify-content: center;
+  padding: 22px 10px;
+}
+.item-row.empty-hint:hover { border-color: var(--border); }
+
 .item-row .badge {
   width: 30px;
   height: 30px;

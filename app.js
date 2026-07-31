@@ -41,6 +41,13 @@ async function init() {
 
 function renderSidebar() {
   itemList.innerHTML = "";
+  if (state.items.length === 0) {
+    const li = document.createElement("li");
+    li.className = "item-row empty-hint";
+    li.textContent = "兵裝資料待提供";
+    itemList.appendChild(li);
+    return;
+  }
   state.items.forEach((it, idx) => {
     const li = document.createElement("li");
     li.className = "item-row";
@@ -194,7 +201,9 @@ function showPopup(marker) {
   body.className = "popup-body";
   const sub = document.createElement("div");
   sub.className = "popup-sub";
-  sub.textContent = "此據點可製造 " + canCraft.length + " 種兵裝：";
+  sub.textContent = canCraft.length
+    ? "此據點可製造 " + canCraft.length + " 種兵裝："
+    : "此據點目前尚無兵裝資料";
   body.appendChild(sub);
 
   for (const it of canCraft) {
