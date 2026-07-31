@@ -265,8 +265,9 @@ function refreshAll() {
 
 overlay.addEventListener('pointerdown', (e) => {
   if (e.target !== overlay || e.button !== 0) return;
-  const xPct = (e.offsetX / stage.clientWidth) * 100;
-  const yPct = (e.offsetY / stage.clientHeight) * 100;
+  const rect = stage.getBoundingClientRect();
+  const xPct = ((e.clientX - rect.left) / rect.width) * 100;
+  const yPct = ((e.clientY - rect.top) / rect.height) * 100;
   addMarker(xPct, yPct);
 });
 
