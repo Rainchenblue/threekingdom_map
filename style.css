@@ -480,16 +480,20 @@ body {
   .app-header h1 { font-size: 16px; }
   .header-status { order: 3; width: 100%; font-size: 12px; }
   .layout { flex-direction: column; overflow: visible; }
-  .map-panel { overflow: hidden; }
+  .map-panel { flex-direction: column; overflow: visible; }
   .map-viewport { padding: 10px; }
   .map-wrap { width: 640px; min-width: 0; }
   .sidebar { width: 100%; border-left: none; border-top: 1px solid var(--border); }
   #itemList { max-height: 55vh; }
   .detail-panel {
-    left: 8px;
-    top: 8px;
-    width: min(360px, calc(100vw - 16px));
-    max-height: calc(100% - 90px);
+    position: static;
+    width: 100%;
+    max-height: none;
+    margin-top: 8px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    box-shadow: none;
   }
   .detail-panel .mat-chip { font-size: 12px; padding: 4px 9px; }
   .detail-panel .res-icon { width: 18px; height: 18px; }
@@ -499,5 +503,5 @@ body {
     bottom: auto;
   }
   .zoom-controls button { width: 38px; height: 38px; }
-  .legend { font-size: 11px; padding: 5px 10px; }
+  .legend { position: static; align-self: flex-start; margin: 8px 12px 0; font-size: 11px; padding: 5px 10px; }
 }
