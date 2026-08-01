@@ -55,7 +55,7 @@ function makeChip(mat, need, checkRes) {
     img.alt = mat;
     chip.appendChild(img);
   }
-  chip.appendChild(document.createTextNode("×" + need));
+  chip.appendChild(document.createTextNode(mat + " ×" + need));
   if (checkRes && (state.playerRes[mat] || 0) < need) chip.classList.add("insufficient");
   return chip;
 }
