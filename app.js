@@ -182,6 +182,7 @@ function setFilter(itemId) {
     row.classList.add("flash");
   }
   applyView();
+  renderPanel();
 }
 
 function clearFilter() {
