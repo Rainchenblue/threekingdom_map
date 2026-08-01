@@ -8,14 +8,25 @@ const state = {
   activeFilter: null,
   zoom: 1,
   baseW: null,
+  qty: 1,
+  playerRes: { 皮: 0, 鐵: 0, 韌皮: 0, 精鐵: 0 },
 };
 
-const mapPanel = document.querySelector(".map-panel");
 const mapViewport = document.getElementById("mapViewport");
 const mapWrap = document.getElementById("mapWrap");
 const markersLayer = document.getElementById("markersLayer");
 const itemList = document.getElementById("itemList");
-const popup = document.getElementById("popup");
+const dpName = document.getElementById("dpName");
+const dpItems = document.getElementById("dpItems");
+const dpTotals = document.getElementById("dpTotals");
+const dpCloseBtn = document.getElementById("dpClose");
+const qtyInput = document.getElementById("qtyInput");
+const resInputs = {
+  皮: document.getElementById("resPi"),
+  鐵: document.getElementById("resTie"),
+  韌皮: document.getElementById("resRen"),
+  精鐵: document.getElementById("resJing"),
+};
 const statusEl = document.getElementById("status");
 const resetBtn = document.getElementById("resetBtn");
 const zoomInBtn = document.getElementById("zoomInBtn");
@@ -40,9 +51,11 @@ async function init() {
     state.markers = markersData.markers;
     for (const it of state.items) state.itemsById[it.id] = it;
 
+    loadPlayerRes();
     renderSidebar();
     renderMarkers();
     applyView();
+    renderPanel();
   } catch (err) {
     statusEl.textContent = "⚠ 資料載入失敗：" + err.message;
   }
@@ -57,8 +70,14 @@ function renderSidebar() {
     itemList.appendChild(li);
     return;
   }
+  const tierRank = (it) => (typeof it.tier === "number" ? it.tier : 0);
   [...state.items]
-    .sort((a, b) => (a.craftable === false) - (b.craftable === false))
+    .sort((a, b) => {
+      const ca = a.craftable === false ? 1 : 0;
+      const cb = b.craftable === false ? 1 : 0;
+      if (ca !== cb) return ca - cb;
+      return tierRank(b) - tierRank(a);
+    })
     .forEach((it) => {
       const inactive = it.craftable === false;
       const li = document.createElement("li");
@@ -118,13 +137,13 @@ function selectMarker(markerId) {
     return;
   }
   state.selectedMarkerId = markerId;
-  showPopup(state.markers.find((m) => m.id === markerId));
+  renderPanel();
   applyView();
 }
 
 function clearSelection() {
   state.selectedMarkerId = null;
-  hidePopup();
+  renderPanel();
   applyView();
 }
 
@@ -176,56 +195,59 @@ function applyView() {
   }
 }
 
-function showPopup(marker) {
+function loadPlayerRes() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("sanguo_player_res") || "{}");
+    for (const k of Object.keys(state.playerRes)) {
+      if (typeof saved[k] === "number" && saved[k] >= 0) state.playerRes[k] = saved[k];
+    }
+  } catch (e) { /* ignore */ }
+  for (const k of Object.keys(resInputs)) resInputs[k].value = state.playerRes[k];
+}
+
+function savePlayerRes() {
+  try {
+    localStorage.setItem("sanguo_player_res", JSON.stringify(state.playerRes));
+  } catch (e) { /* ignore */ }
+}
+
+function renderPanel() {
+  const marker = state.markers.find((m) => m.id === state.selectedMarkerId);
+  if (!marker) {
+    dpName.textContent = "尚未選取據點";
+    dpItems.innerHTML = '<div class="dp-empty">點擊地圖據點，查看該處可造的兵裝與所需資源</div>';
+    dpTotals.innerHTML = "";
+    return;
+  }
+
   const canCraft = state.items.filter((it) => marker.items.includes(it.id));
+  const qty = state.qty;
+  const totals = {};
 
-  popup.innerHTML = "";
-
-  const head = document.createElement("div");
-  head.className = "popup-head";
-  const nameEl = document.createElement("div");
-  nameEl.className = "name";
-  nameEl.textContent = marker.name;
-  const closeBtn = document.createElement("button");
-  closeBtn.className = "popup-close";
-  closeBtn.textContent = "✕";
-  closeBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    clearSelection();
-  });
-  head.appendChild(nameEl);
-  head.appendChild(closeBtn);
-
-  const body = document.createElement("div");
-  body.className = "popup-body";
-  const sub = document.createElement("div");
-  sub.className = "popup-sub";
-  sub.textContent = canCraft.length
-    ? "此據點可製造 " + canCraft.length + " 種兵裝："
-    : "此據點目前尚無兵裝資料";
-  body.appendChild(sub);
+  dpName.textContent = marker.name + " · 可造 " + canCraft.length + " 種兵裝";
+  dpItems.innerHTML = "";
 
   for (const it of canCraft) {
     const row = document.createElement("div");
-    row.className = "popup-item";
+    row.className = "dp-item";
+    row.dataset.itemId = it.id;
 
     const row1 = document.createElement("div");
     row1.className = "row1";
     const iname = document.createElement("div");
     iname.className = "iname";
     iname.textContent = it.name;
-    const count = document.createElement("div");
-    count.className = "mat-count";
-    count.textContent = "材料 " + Object.keys(it.materials).length + " 種";
     row1.appendChild(iname);
-    row1.appendChild(count);
 
     const mats = document.createElement("div");
     mats.className = "materials";
-    for (const [mat, qty] of Object.entries(it.materials)) {
+    for (const [mat, q] of Object.entries(it.materials)) {
+      const need = q * qty;
+      totals[mat] = (totals[mat] || 0) + need;
       const chip = document.createElement("span");
       chip.className = "mat-chip mat-" + mat;
-      chip.textContent = mat + " ×" + qty;
+      chip.textContent = mat + " ×" + need;
+      if ((state.playerRes[mat] || 0) < need) chip.classList.add("insufficient");
       mats.appendChild(chip);
     }
 
@@ -235,17 +257,17 @@ function showPopup(marker) {
       e.stopPropagation();
       setFilter(it.id);
     });
-    body.appendChild(row);
+    dpItems.appendChild(row);
   }
 
-  popup.appendChild(head);
-  popup.appendChild(body);
-  popup.classList.remove("hidden");
-  positionPopup(marker);
-}
-
-function hidePopup() {
-  popup.classList.add("hidden");
+  dpTotals.innerHTML = "";
+  for (const [mat, need] of Object.entries(totals)) {
+    const chip = document.createElement("span");
+    chip.className = "mat-chip mat-" + mat;
+    chip.textContent = mat + " ×" + need;
+    if ((state.playerRes[mat] || 0) < need) chip.classList.add("insufficient");
+    dpTotals.appendChild(chip);
+  }
 }
 
 function computeBaseW() {
@@ -275,10 +297,6 @@ function applyZoom(z, keepCenter) {
   }
 
   mapWrap.style.width = newW + "px";
-  if (state.selectedMarkerId) {
-    const m = state.markers.find((x) => x.id === state.selectedMarkerId);
-    if (m) positionPopup(m);
-  }
 }
 
 function resetZoom() {
@@ -287,28 +305,6 @@ function resetZoom() {
   mapWrap.style.width = state.baseW + "px";
   mapViewport.scrollLeft = 0;
   mapViewport.scrollTop = 0;
-  if (state.selectedMarkerId) {
-    const m = state.markers.find((x) => x.id === state.selectedMarkerId);
-    if (m) positionPopup(m);
-  }
-}
-
-function positionPopup(marker) {
-  if (isMobile()) return;
-  const wrapRect = mapWrap.getBoundingClientRect();
-  const panelRect = mapPanel.getBoundingClientRect();
-  const x = (marker.x / 100) * wrapRect.width + (wrapRect.left - panelRect.left);
-  const y = (marker.y / 100) * wrapRect.height + (wrapRect.top - panelRect.top);
-  const pw = popup.offsetWidth;
-  const ph = popup.offsetHeight;
-
-  let left = x + 24;
-  let top = y - ph - 10;
-  if (left + pw > panelRect.width - 10) left = x - pw - 24;
-  if (left < 10) left = 10;
-  if (top < 10) top = y + 26;
-  popup.style.left = left + "px";
-  popup.style.top = top + "px";
 }
 
 zoomInBtn.addEventListener("click", () => applyZoom(state.zoom * 1.25, true));
@@ -358,12 +354,7 @@ window.addEventListener("mouseup", () => {
   dragState = null;
 });
 
-mapViewport.addEventListener("scroll", () => {
-  if (state.selectedMarkerId && !isMobile()) {
-    const m = state.markers.find((x) => x.id === state.selectedMarkerId);
-    if (m) positionPopup(m);
-  }
-});
+mapViewport.addEventListener("scroll", () => {});
 
 mapWrap.addEventListener("click", (e) => {
   if (e.target === mapWrap || e.target.id === "mapImg") {
@@ -376,12 +367,30 @@ resetBtn.addEventListener("click", () => {
   clearFilter();
 });
 
+dpCloseBtn.addEventListener("click", () => {
+  clearSelection();
+});
+
+qtyInput.addEventListener("input", () => {
+  let v = parseInt(qtyInput.value, 10);
+  if (isNaN(v) || v < 1) v = 1;
+  state.qty = v;
+  qtyInput.value = v;
+  renderPanel();
+});
+
+for (const [mat, el] of Object.entries(resInputs)) {
+  el.addEventListener("input", () => {
+    let v = parseInt(el.value, 10);
+    if (isNaN(v) || v < 0) v = 0;
+    state.playerRes[mat] = v;
+    savePlayerRes();
+    renderPanel();
+  });
+}
+
 window.addEventListener("resize", () => {
   if (isMobile()) return;
   computeBaseW();
   applyZoom(state.zoom, false);
-  if (state.selectedMarkerId) {
-    const m = state.markers.find((x) => x.id === state.selectedMarkerId);
-    if (m) positionPopup(m);
-  }
 });

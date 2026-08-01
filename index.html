@@ -30,7 +30,30 @@
         <button id="zoomResetBtn" title="重置縮放">100%</button>
         <button id="zoomInBtn" title="放大">＋</button>
       </div>
-      <div id="popup" class="popup hidden"></div>
+      <div id="detailPanel" class="detail-panel">
+        <div class="dp-head">
+          <span class="dp-name" id="dpName">尚未選取據點</span>
+          <button id="dpClose" class="dp-close" title="關閉">✕</button>
+        </div>
+        <div class="dp-body" id="dpItems"></div>
+        <div class="dp-section">
+          <span class="dp-label">數量</span>
+          <input type="number" id="qtyInput" class="dp-input" value="1" min="1" step="1" title="以數量計算所需資源">
+        </div>
+        <div class="dp-section">
+          <span class="dp-label">我的資源</span>
+          <div class="dp-res-grid">
+            <label class="dp-res-field">皮<input type="number" id="resPi" class="dp-input" min="0" step="1" value="0"></label>
+            <label class="dp-res-field">鐵<input type="number" id="resTie" class="dp-input" min="0" step="1" value="0"></label>
+            <label class="dp-res-field">韌皮<input type="number" id="resRen" class="dp-input" min="0" step="1" value="0"></label>
+            <label class="dp-res-field">精鐵<input type="number" id="resJing" class="dp-input" min="0" step="1" value="0"></label>
+          </div>
+        </div>
+        <div class="dp-section">
+          <span class="dp-label">合計所需（數量 × 各兵裝）</span>
+          <div id="dpTotals" class="materials"></div>
+        </div>
+      </div>
     </section>
 
     <aside class="sidebar">
