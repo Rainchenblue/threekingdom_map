@@ -57,24 +57,28 @@ function renderSidebar() {
     itemList.appendChild(li);
     return;
   }
-  state.items.forEach((it) => {
-    const li = document.createElement("li");
-    li.className = "item-row";
-    li.dataset.itemId = it.id;
-    li.title = it.name;
+  [...state.items]
+    .sort((a, b) => (a.craftable === false) - (b.craftable === false))
+    .forEach((it) => {
+      const inactive = it.craftable === false;
+      const li = document.createElement("li");
+      li.className = "item-row" + (inactive ? " inactive" : "");
+      li.dataset.itemId = it.id;
+      li.title = it.name;
 
-    const img = document.createElement("img");
-    img.className = "item-img";
-    img.src = it.image;
-    img.alt = it.name;
-    li.appendChild(img);
+      const img = document.createElement("img");
+      img.className = "item-img";
+      img.src = it.image;
+      img.alt = it.name;
+      li.appendChild(img);
 
-    li.addEventListener("click", (e) => {
-      e.stopPropagation();
-      setFilter(it.id);
+      li.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (inactive) return;
+        setFilter(it.id);
+      });
+      itemList.appendChild(li);
     });
-    itemList.appendChild(li);
-  });
 }
 
 function renderMarkers() {
@@ -155,6 +159,7 @@ function applyView() {
   }
 
   for (const row of itemList.children) {
+    if (row.classList.contains("inactive")) continue;
     row.classList.remove("active", "available");
     if (filter && row.dataset.itemId === filter) row.classList.add("active");
     if (state.selectedMarkerId) {

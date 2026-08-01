@@ -351,6 +351,13 @@ body {
   50% { background: rgba(217, 164, 65, 0.35); }
 }
 
+.item-row.inactive {
+  cursor: default;
+  opacity: 0.45;
+  filter: grayscale(0.8);
+}
+.item-row.inactive:hover { border-color: var(--border); }
+
 @media (max-width: 900px) {
   html, body { height: auto; }
   .app-header { flex-wrap: wrap; gap: 8px; padding: 8px 12px; }
