@@ -9,6 +9,7 @@ const state = {
   zoom: 1,
   baseW: null,
   qty: 1,
+  resCheck: false,
   playerRes: { 皮: 0, 鐵: 0, 韌皮: 0, 精鐵: 0 },
 };
 
@@ -21,6 +22,7 @@ const dpItems = document.getElementById("dpItems");
 const dpTotals = document.getElementById("dpTotals");
 const dpCloseBtn = document.getElementById("dpClose");
 const qtyInput = document.getElementById("qtyInput");
+const resToggle = document.getElementById("resToggle");
 const resInputs = {
   皮: document.getElementById("resPi"),
   鐵: document.getElementById("resTie"),
@@ -201,13 +203,15 @@ function loadPlayerRes() {
     for (const k of Object.keys(state.playerRes)) {
       if (typeof saved[k] === "number" && saved[k] >= 0) state.playerRes[k] = saved[k];
     }
+    if (typeof saved.resCheck === "boolean") state.resCheck = saved.resCheck;
   } catch (e) { /* ignore */ }
   for (const k of Object.keys(resInputs)) resInputs[k].value = state.playerRes[k];
+  resToggle.checked = state.resCheck;
 }
 
 function savePlayerRes() {
   try {
-    localStorage.setItem("sanguo_player_res", JSON.stringify(state.playerRes));
+    localStorage.setItem("sanguo_player_res", JSON.stringify(Object.assign({}, state.playerRes, { resCheck: state.resCheck })));
   } catch (e) { /* ignore */ }
 }
 
@@ -220,9 +224,23 @@ function renderPanel() {
     return;
   }
 
-  const canCraft = state.items.filter((it) => marker.items.includes(it.id));
+  let canCraft = state.items.filter((it) => marker.items.includes(it.id));
+  if (state.activeFilter) {
+    canCraft = marker.items.includes(state.activeFilter)
+      ? [state.itemsById[state.activeFilter]]
+      : [];
+  }
   const qty = state.qty;
+  const checkRes = state.resCheck;
   const totals = {};
+
+  if (canCraft.length === 0 && state.activeFilter) {
+    const f = state.itemsById[state.activeFilter];
+    dpName.textContent = marker.name;
+    dpItems.innerHTML = '<div class="dp-empty">此據點無法製造「' + f.name + '」</div>';
+    dpTotals.innerHTML = "";
+    return;
+  }
 
   dpName.textContent = marker.name + " · 可造 " + canCraft.length + " 種兵裝";
   dpItems.innerHTML = "";
@@ -247,7 +265,7 @@ function renderPanel() {
       const chip = document.createElement("span");
       chip.className = "mat-chip mat-" + mat;
       chip.textContent = mat + " ×" + need;
-      if ((state.playerRes[mat] || 0) < need) chip.classList.add("insufficient");
+      if (checkRes && (state.playerRes[mat] || 0) < need) chip.classList.add("insufficient");
       mats.appendChild(chip);
     }
 
@@ -265,7 +283,7 @@ function renderPanel() {
     const chip = document.createElement("span");
     chip.className = "mat-chip mat-" + mat;
     chip.textContent = mat + " ×" + need;
-    if ((state.playerRes[mat] || 0) < need) chip.classList.add("insufficient");
+    if (checkRes && (state.playerRes[mat] || 0) < need) chip.classList.add("insufficient");
     dpTotals.appendChild(chip);
   }
 }
@@ -376,6 +394,12 @@ qtyInput.addEventListener("input", () => {
   if (isNaN(v) || v < 1) v = 1;
   state.qty = v;
   qtyInput.value = v;
+  renderPanel();
+});
+
+resToggle.addEventListener("change", () => {
+  state.resCheck = resToggle.checked;
+  savePlayerRes();
   renderPanel();
 });
 

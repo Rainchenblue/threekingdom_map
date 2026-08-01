@@ -36,22 +36,29 @@
           <button id="dpClose" class="dp-close" title="關閉">✕</button>
         </div>
         <div class="dp-body" id="dpItems"></div>
-        <div class="dp-section">
+        <div class="dp-section dp-qty">
           <span class="dp-label">數量</span>
           <input type="number" id="qtyInput" class="dp-input" value="1" min="1" step="1" title="以數量計算所需資源">
         </div>
         <div class="dp-section">
-          <span class="dp-label">我的資源</span>
+          <span class="dp-label">合計所需</span>
+          <div id="dpTotals" class="materials"></div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-res-head">
+            <span class="dp-label">我的資源</span>
+            <label class="dp-switch" title="開啟後，資源不足時顯示紅字警示">
+              <input type="checkbox" id="resToggle">
+              <span class="dp-switch-track"></span>
+              <span class="dp-switch-text">顯示不足警示</span>
+            </label>
+          </div>
           <div class="dp-res-grid">
             <label class="dp-res-field">皮<input type="number" id="resPi" class="dp-input" min="0" step="1" value="0"></label>
             <label class="dp-res-field">鐵<input type="number" id="resTie" class="dp-input" min="0" step="1" value="0"></label>
             <label class="dp-res-field">韌皮<input type="number" id="resRen" class="dp-input" min="0" step="1" value="0"></label>
             <label class="dp-res-field">精鐵<input type="number" id="resJing" class="dp-input" min="0" step="1" value="0"></label>
           </div>
-        </div>
-        <div class="dp-section">
-          <span class="dp-label">合計所需（數量 × 各兵裝）</span>
-          <div id="dpTotals" class="materials"></div>
         </div>
       </div>
     </section>
