@@ -365,16 +365,34 @@ body {
 .dp-switch-text { font-size: 12px; color: var(--text-dim); }
 .dp-switch input:checked ~ .dp-switch-text { color: var(--text); }
 
-.materials { display: flex; flex-wrap: wrap; gap: 4px; }
+.materials {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+}
 
 .mat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: 12px;
   padding: 2px 8px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.06);
   color: var(--text);
   border: 1px solid var(--border);
+  white-space: nowrap;
 }
+
+.res-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+.dp-res-field .res-icon { width: 20px; height: 20px; flex-shrink: 0; }
 
 .mat-chip.mat-鐵 { color: var(--blue); border-color: rgba(74, 144, 217, 0.5); }
 .mat-chip.mat-皮 { color: var(--brown); border-color: rgba(176, 122, 74, 0.5); }

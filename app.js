@@ -37,6 +37,29 @@ const zoomResetBtn = document.getElementById("zoomResetBtn");
 
 const isMobile = () => window.matchMedia("(max-width: 900px)").matches;
 
+const RES_ORDER = ["皮", "鐵", "韌皮", "精鐵"];
+const RES_ICON = {
+  皮: "assets/resources/pi.png",
+  鐵: "assets/resources/tie.png",
+  韌皮: "assets/resources/renpi.png",
+  精鐵: "assets/resources/jingtie.png",
+};
+
+function makeChip(mat, need, checkRes) {
+  const chip = document.createElement("span");
+  chip.className = "mat-chip mat-" + mat;
+  if (RES_ICON[mat]) {
+    const img = document.createElement("img");
+    img.className = "res-icon";
+    img.src = RES_ICON[mat];
+    img.alt = mat;
+    chip.appendChild(img);
+  }
+  chip.appendChild(document.createTextNode("×" + need));
+  if (checkRes && (state.playerRes[mat] || 0) < need) chip.classList.add("insufficient");
+  return chip;
+}
+
 init();
 
 async function init() {
@@ -259,14 +282,11 @@ function renderPanel() {
 
     const mats = document.createElement("div");
     mats.className = "materials";
-    for (const [mat, q] of Object.entries(it.materials)) {
-      const need = q * qty;
+    for (const mat of RES_ORDER) {
+      if (!(mat in it.materials)) continue;
+      const need = it.materials[mat] * qty;
       totals[mat] = (totals[mat] || 0) + need;
-      const chip = document.createElement("span");
-      chip.className = "mat-chip mat-" + mat;
-      chip.textContent = mat + " ×" + need;
-      if (checkRes && (state.playerRes[mat] || 0) < need) chip.classList.add("insufficient");
-      mats.appendChild(chip);
+      mats.appendChild(makeChip(mat, need, checkRes));
     }
 
     row.appendChild(row1);
@@ -279,12 +299,9 @@ function renderPanel() {
   }
 
   dpTotals.innerHTML = "";
-  for (const [mat, need] of Object.entries(totals)) {
-    const chip = document.createElement("span");
-    chip.className = "mat-chip mat-" + mat;
-    chip.textContent = mat + " ×" + need;
-    if (checkRes && (state.playerRes[mat] || 0) < need) chip.classList.add("insufficient");
-    dpTotals.appendChild(chip);
+  for (const mat of RES_ORDER) {
+    if (!(mat in totals)) continue;
+    dpTotals.appendChild(makeChip(mat, totals[mat], checkRes));
   }
 }
 
