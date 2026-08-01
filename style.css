@@ -310,7 +310,7 @@ body {
 
 .detail-panel .dp-res-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 5px;
 }
 
@@ -368,7 +368,7 @@ body {
 
 .materials {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 4px;
 }
 
@@ -491,8 +491,6 @@ body {
     width: min(360px, calc(100vw - 16px));
     max-height: calc(100% - 90px);
   }
-  .detail-panel .materials,
-  .detail-panel .dp-res-grid { grid-template-columns: 1fr; }
   .detail-panel .mat-chip { font-size: 12px; padding: 4px 9px; }
   .detail-panel .res-icon { width: 18px; height: 18px; }
   .zoom-controls {
