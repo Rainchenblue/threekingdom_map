@@ -287,7 +287,7 @@ function renderPanel() {
       if (!(mat in it.materials)) continue;
       const need = it.materials[mat] * qty;
       totals[mat] = (totals[mat] || 0) + need;
-      mats.appendChild(makeChip(mat, need, checkRes));
+      mats.appendChild(makeChip(mat, it.materials[mat], checkRes));
     }
 
     row.appendChild(row1);
