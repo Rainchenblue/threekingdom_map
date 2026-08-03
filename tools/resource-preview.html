@@ -99,6 +99,13 @@ const TYPES = [
   { id: 'guankou',  name: '關口', color: '#ef5350' }
 ];
 const TYPE_BY_ID = Object.fromEntries(TYPES.map(t => [t.id, t]));
+const LEVELS = [
+  { v: 1, name: 'Lv.1', colorName: '白', color: '#ffffff' },
+  { v: 2, name: 'Lv.2', colorName: '綠', color: '#4caf72' },
+  { v: 3, name: 'Lv.3', colorName: '藍', color: '#4a90d9' },
+  { v: 4, name: 'Lv.4', colorName: '紫', color: '#9a6bd1' }
+];
+const LEVEL_BY_V = Object.fromEntries(LEVELS.map(l => [l.v, l]));
 
 const viewport = document.getElementById('viewport');
 const stage = document.getElementById('stage');
@@ -162,12 +169,14 @@ function renderPoint(p) {
   if (!isShow(p.type)) div.style.display = 'none';
 
   const t = TYPE_BY_ID[p.type] || TYPES[0];
+  const lv = LEVEL_BY_V[p.level] || LEVELS[0];
   const dot = document.createElement('div');
   dot.className = 'dot';
   dot.style.background = t.color;
+  dot.style.borderColor = lv.color;
   const label = document.createElement('div');
   label.className = 'label';
-  label.textContent = (p.name ? p.name + ' · ' : '') + t.name;
+  label.textContent = (p.name ? p.name + ' · ' : '') + t.name + ' · ' + lv.name;
 
   div.appendChild(dot);
   div.appendChild(label);
@@ -260,7 +269,7 @@ document.getElementById('loadFromPickerBtn').addEventListener('click', () => {
     const raw = localStorage.getItem('resource_picker_points');
     if (!raw) throw new Error('讀不到標點工具資料（若用 file:// 開啟可能因瀏覽器限制無法跨檔讀取，請改用貼上 JSON）');
     const arr = JSON.parse(raw);
-    points = arr.map(m => ({ id: m.id || '', type: m.type || 'pi', name: m.name || '', x: Number(m.x), y: Number(m.y), el: null }));
+    points = arr.map(m => ({ id: m.id || '', type: m.type || 'pi', level: m.level || 1, name: m.name || '', x: Number(m.x), y: Number(m.y), el: null }));
     renderAll();
   } catch (e) {
     alert(e.message);
@@ -270,9 +279,9 @@ document.getElementById('loadFromPickerBtn').addEventListener('click', () => {
 document.getElementById('sampleBtn').addEventListener('click', () => {
   document.getElementById('jsonIn').value = JSON.stringify({
     resources: [
-      { id: 'r1', type: 'pi', name: '範例皮料', x: 30.5, y: 20.1 },
-      { id: 'r2', type: 'tie', name: '範例鐵礦', x: 40, y: 45 },
-      { id: 'r3', type: 'guankou', name: '範例關口', x: 55, y: 65.5 }
+      { id: 'r1', type: 'pi', level: 3, name: '範例皮料', x: 30.5, y: 20.1 },
+      { id: 'r2', type: 'tie', level: 1, name: '範例鐵礦', x: 40, y: 45 },
+      { id: 'r3', type: 'guankou', level: 4, name: '範例關口', x: 55, y: 65.5 }
     ]
   }, null, 2);
 });
