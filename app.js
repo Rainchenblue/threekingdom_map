@@ -241,25 +241,58 @@ function savePlayerRes() {
 
 function renderPanel() {
   const marker = state.markers.find((m) => m.id === state.selectedMarkerId);
-  if (!marker) {
-    dpName.textContent = "尚未選取據點";
-    dpItems.innerHTML = '<div class="dp-empty">點擊地圖據點，查看該處可造的兵裝與所需資源</div>';
-    dpTotals.innerHTML = "";
-    return;
-  }
-
-  let canCraft = state.items.filter((it) => marker.items.includes(it.id));
-  if (state.activeFilter) {
-    canCraft = marker.items.includes(state.activeFilter)
-      ? [state.itemsById[state.activeFilter]]
-      : [];
-  }
+  const filter = state.activeFilter;
   const qty = state.qty;
   const checkRes = state.resCheck;
   const totals = {};
 
-  if (canCraft.length === 0 && state.activeFilter) {
-    const f = state.itemsById[state.activeFilter];
+  if (!marker) {
+    if (!filter) {
+      dpName.textContent = "尚未選取據點";
+      dpItems.innerHTML = '<div class="dp-empty">點擊地圖據點，查看該處可造的兵裝與所需資源</div>';
+      dpTotals.innerHTML = "";
+      return;
+    }
+    const it = state.itemsById[filter];
+    if (!it) return;
+    dpName.textContent = it.name + " · 材料需求";
+    dpItems.innerHTML = "";
+    const row = document.createElement("div");
+    row.className = "dp-item";
+    const row1 = document.createElement("div");
+    row1.className = "row1";
+    const iname = document.createElement("div");
+    iname.className = "iname";
+    iname.textContent = it.name;
+    row1.appendChild(iname);
+    const mats = document.createElement("div");
+    mats.className = "materials";
+    for (const mat of RES_ORDER) {
+      if (!(mat in it.materials)) continue;
+      const need = it.materials[mat] * qty;
+      totals[mat] = need;
+      mats.appendChild(makeChip(mat, it.materials[mat], checkRes));
+    }
+    row.appendChild(row1);
+    row.appendChild(mats);
+    dpItems.appendChild(row);
+    dpTotals.innerHTML = "";
+    for (const mat of RES_ORDER) {
+      if (!(mat in totals)) continue;
+      dpTotals.appendChild(makeChip(mat, totals[mat], checkRes));
+    }
+    return;
+  }
+
+  let canCraft = state.items.filter((it) => marker.items.includes(it.id));
+  if (filter) {
+    canCraft = marker.items.includes(filter)
+      ? [state.itemsById[filter]]
+      : [];
+  }
+
+  if (canCraft.length === 0 && filter) {
+    const f = state.itemsById[filter];
     dpName.textContent = marker.name;
     dpItems.innerHTML = '<div class="dp-empty">此據點無法製造「' + f.name + '」</div>';
     dpTotals.innerHTML = "";
