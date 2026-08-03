@@ -41,6 +41,8 @@ const zoomResetBtn = document.getElementById("zoomResetBtn");
 
 const isMobile = () => window.matchMedia("(max-width: 900px)").matches;
 
+const tierRank = (it) => (typeof it.tier === "number" ? it.tier : 0);
+
 const RES_ORDER = ["皮", "鐵", "韌皮", "精鐵"];
 const RES_ICON = {
   皮: "assets/resources/pi.png",
@@ -104,7 +106,6 @@ function renderSidebar() {
     itemList.appendChild(li);
     return;
   }
-  const tierRank = (it) => (typeof it.tier === "number" ? it.tier : 0);
   [...state.items]
     .sort((a, b) => {
       const ca = a.craftable === false ? 1 : 0;
@@ -391,7 +392,9 @@ function renderPanel() {
     return;
   }
 
-  let canCraft = state.items.filter((it) => marker.items.includes(it.id));
+  let canCraft = state.items
+    .filter((it) => marker.items.includes(it.id))
+    .sort((a, b) => tierRank(b) - tierRank(a));
   if (filter) {
     canCraft = marker.items.includes(filter)
       ? [state.itemsById[filter]]
