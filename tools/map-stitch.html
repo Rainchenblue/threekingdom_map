@@ -19,7 +19,7 @@
   #viewport { flex: 1; overflow: auto; position: relative; background: #14161a; }
   #stage { position: relative; transform-origin: 0 0; }
   #baseImg { position: absolute; top: 0; left: 0; display: block; user-select: none; pointer-events: none; }
-  #topImg { position: absolute; display: block; user-select: none; pointer-events: none; cursor: grab; }
+  #topImg { position: absolute; display: block; user-select: none; cursor: grab; }
   #topImg.dragging { cursor: grabbing; }
   aside { width: 300px; border-left: 1px solid #3a4250; background: #22262e; display: flex; flex-direction: column; overflow-y: auto; }
   aside section { padding: 12px; border-bottom: 1px solid #333a44; }
@@ -46,7 +46,7 @@
 
 <main>
   <div id="viewport">
-    <div class="hint">拖曳上層圖對齊｜滾輪放大檢視｜調「透明度」看對齊程度</div>
+    <div class="hint">拖曳上層圖對齊（移動時自動半透明，鬆開即恢復不透明看接縫）｜滾輪放大檢視｜可調透明度微調</div>
     <div id="stage">
       <img id="baseImg" alt="底圖">
       <img id="topImg" alt="上層圖">
@@ -69,8 +69,8 @@
     <section>
       <h2>對齊</h2>
       <div class="field">
-        <label>上層透明度：<span id="opacVal">50%</span></label>
-        <input type="range" id="opacSlider" min="0" max="100" value="50">
+        <label>上層透明度：<span id="opacVal">100%</span></label>
+        <input type="range" id="opacSlider" min="0" max="100" value="100">
       </div>
       <div class="field">
         <label>上層縮放（%）：<span id="scaleVal">100%</span></label>
@@ -189,11 +189,12 @@ document.getElementById('resetOffBtn').addEventListener('click', () => {
   applyLayout();
 });
 
-// 拖曳上層圖
+// 拖曳上層圖（移動時半透明對齊，鬆開恢復滑桿透明度看接縫）
 topImg.addEventListener('pointerdown', (e) => {
   if (e.button !== 0) return;
   e.preventDefault();
-  drag = { x: e.clientX, y: e.clientY, ox: offX, oy: offY };
+  drag = { x: e.clientX, y: e.clientY, ox: offX, oy: offY, prevOp: topImg.style.opacity };
+  topImg.style.opacity = 0.4;
   topImg.classList.add('dragging');
   topImg.setPointerCapture(e.pointerId);
 });
@@ -206,10 +207,12 @@ topImg.addEventListener('pointermove', (e) => {
 });
 
 topImg.addEventListener('pointerup', () => {
+  if (drag) topImg.style.opacity = drag.prevOp || (opacSlider.value / 100);
   drag = null;
   topImg.classList.remove('dragging');
 });
 topImg.addEventListener('pointercancel', () => {
+  if (drag) topImg.style.opacity = drag.prevOp || (opacSlider.value / 100);
   drag = null;
   topImg.classList.remove('dragging');
 });
