@@ -418,8 +418,8 @@ body {
 }
 
 .pop-list {
-  flex: 1 1 0;
-  min-width: 0;
+  width: 220px;
+  flex-shrink: 0;
   overflow: auto;
   padding: 10px;
   border-right: 1px solid var(--border);
