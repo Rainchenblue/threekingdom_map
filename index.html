@@ -62,9 +62,12 @@
     <aside class="sidebar">
       <div class="sidebar-head">
         <h2>兵裝清單</h2>
-        <p class="hint">點擊兵裝名稱 → 地圖高亮可製造的據點<br>點擊據點 → 查看該處可造兵裝與材料</p>
+        <p class="hint">點擊兵裝 → 高亮可造據點並顯示所需人口<br>點擊人口 → 高亮擁有該人口的據點<br>點擊據點 → 查看該處可造兵裝與材料</p>
       </div>
-      <ul id="itemList"></ul>
+      <div class="sidebar-body">
+        <div class="pop-list" id="popList"></div>
+        <ul id="itemList"></ul>
+      </div>
     </aside>
   </main>
 

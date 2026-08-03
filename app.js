@@ -3,9 +3,12 @@
 const state = {
   items: [],
   itemsById: {},
+  populations: [],
+  populationsById: {},
   markers: [],
   selectedMarkerId: null,
   activeFilter: null,
+  activePopulation: null,
   zoom: 1,
   baseW: null,
   qty: 1,
@@ -17,6 +20,7 @@ const mapViewport = document.getElementById("mapViewport");
 const mapWrap = document.getElementById("mapWrap");
 const markersLayer = document.getElementById("markersLayer");
 const itemList = document.getElementById("itemList");
+const popList = document.getElementById("popList");
 const dpName = document.getElementById("dpName");
 const dpItems = document.getElementById("dpItems");
 const dpTotals = document.getElementById("dpTotals");
@@ -64,20 +68,25 @@ init();
 
 async function init() {
   try {
-    const [itemsRes, markersRes] = await Promise.all([
+    const [itemsRes, markersRes, popsRes] = await Promise.all([
       fetch("data/items.json"),
       fetch("data/markers.json"),
+      fetch("data/populations.json"),
     ]);
-    if (!itemsRes.ok || !markersRes.ok) throw new Error("資料載入失敗");
+    if (!itemsRes.ok || !markersRes.ok || !popsRes.ok) throw new Error("資料載入失敗");
     const itemsData = await itemsRes.json();
     const markersData = await markersRes.json();
+    const popsData = await popsRes.json();
 
     state.items = itemsData.items;
     state.markers = markersData.markers;
     for (const it of state.items) state.itemsById[it.id] = it;
+    state.populations = popsData.populations || [];
+    for (const p of state.populations) state.populationsById[p.id] = p;
 
     loadPlayerRes();
     renderSidebar();
+    renderPopList();
     renderMarkers();
     applyView();
     renderPanel();
@@ -118,11 +127,66 @@ function renderSidebar() {
 
       li.addEventListener("click", (e) => {
         e.stopPropagation();
-        if (inactive) return;
         setFilter(it.id);
       });
       itemList.appendChild(li);
     });
+}
+
+function renderPopList() {
+  popList.innerHTML = "";
+  let list;
+  if (state.activeFilter) {
+    const it = state.itemsById[state.activeFilter];
+    const popIds = it ? it.population || [] : [];
+    if (popIds.length === 0) {
+      const li = document.createElement("div");
+      li.className = "pop-row empty-hint";
+      li.textContent = "此兵團不需徵兵人口";
+      popList.appendChild(li);
+      return;
+    }
+    list = popIds.map((id) => state.populationsById[id]).filter(Boolean);
+  } else {
+    list = state.populations.slice();
+  }
+
+  if (list.length === 0) {
+    const li = document.createElement("div");
+    li.className = "pop-row empty-hint";
+    li.textContent = "徵兵人口資料待提供";
+    popList.appendChild(li);
+    return;
+  }
+
+  for (const p of list) {
+    const li = document.createElement("div");
+    li.className = "pop-row";
+    li.dataset.popId = p.id;
+    li.title = p.name;
+    const img = document.createElement("img");
+    img.className = "pop-img";
+    img.src = p.image;
+    img.alt = p.name;
+    li.appendChild(img);
+    li.addEventListener("click", (e) => {
+      e.stopPropagation();
+      togglePopulation(p.id);
+    });
+    popList.appendChild(li);
+  }
+}
+
+function togglePopulation(popId) {
+  state.activePopulation = state.activePopulation === popId ? null : popId;
+  const row = popList.querySelector('[data-pop-id="' + popId + '"]');
+  if (row) {
+    row.scrollIntoView({ block: "nearest" });
+    row.classList.remove("flash");
+    void row.offsetWidth;
+    row.classList.add("flash");
+  }
+  applyView();
 }
 
 function renderMarkers() {
@@ -152,8 +216,18 @@ function renderMarkers() {
   });
 }
 
-function locationCount(itemId) {
-  return state.markers.filter((m) => m.items.includes(itemId)).length;
+function isInactiveFilter() {
+  const it = state.activeFilter ? state.itemsById[state.activeFilter] : null;
+  return !!it && it.craftable === false;
+}
+
+function matchCount() {
+  const inactiveFilter = isInactiveFilter();
+  return state.markers.filter((m) => {
+    if (state.activeFilter && !inactiveFilter && !(m.items || []).includes(state.activeFilter)) return false;
+    if (state.activePopulation && !(m.population || []).includes(state.activePopulation)) return false;
+    return true;
+  }).length;
 }
 
 function selectMarker(markerId) {
@@ -174,6 +248,7 @@ function clearSelection() {
 
 function setFilter(itemId) {
   state.activeFilter = state.activeFilter === itemId ? null : itemId;
+  state.activePopulation = null;
   const row = itemList.querySelector('[data-item-id="' + itemId + '"]');
   if (row) {
     row.scrollIntoView({ block: "nearest" });
@@ -183,28 +258,35 @@ function setFilter(itemId) {
   }
   applyView();
   renderPanel();
+  renderPopList();
 }
 
 function clearFilter() {
   state.activeFilter = null;
+  state.activePopulation = null;
   applyView();
+  renderPopList();
 }
 
 function applyView() {
   const filter = state.activeFilter;
+  const popFilter = state.activePopulation;
+  const inactiveFilter = isInactiveFilter();
 
   for (const mEl of markersLayer.children) {
     const m = state.markers.find((x) => x.id === mEl.dataset.markerId);
     mEl.classList.remove("match", "dim", "selected");
-    if (filter) {
-      if (m.items.includes(filter)) mEl.classList.add("match");
+    let isMatch = true;
+    if (filter && !inactiveFilter && !(m.items || []).includes(filter)) isMatch = false;
+    if (popFilter && !(m.population || []).includes(popFilter)) isMatch = false;
+    if ((filter && !inactiveFilter) || popFilter) {
+      if (isMatch) mEl.classList.add("match");
       else mEl.classList.add("dim");
     }
     if (state.selectedMarkerId === m.id) mEl.classList.add("selected");
   }
 
   for (const row of itemList.children) {
-    if (row.classList.contains("inactive")) continue;
     row.classList.remove("active", "available");
     if (filter && row.dataset.itemId === filter) row.classList.add("active");
     if (state.selectedMarkerId) {
@@ -213,9 +295,34 @@ function applyView() {
     }
   }
 
-  if (filter) {
+  for (const row of popList.children) {
+    row.classList.remove("active");
+    if (popFilter && row.dataset.popId === popFilter) row.classList.add("active");
+  }
+
+  if (inactiveFilter) {
     const it = state.itemsById[filter];
-    statusEl.textContent = "高亮：可製造「" + it.name + "」的據點（" + locationCount(filter) + " 處）";
+    const popName = popFilter
+      ? (state.populationsById[popFilter] ? state.populationsById[popFilter].name : popFilter)
+      : (it.population && state.populationsById[it.population[0]]
+          ? state.populationsById[it.population[0]].name
+          : "");
+    if (popFilter) {
+      statusEl.textContent = "高亮：有「" + popName + "」人口的據點（" + matchCount() + " 處）";
+    } else {
+      statusEl.textContent = "「" + it.name + "」無固定製造據點，所需人口：「" + popName + "」";
+    }
+    return;
+  }
+
+  const parts = [];
+  if (filter) parts.push("可造「" + state.itemsById[filter].name + "」");
+  if (popFilter) {
+    const p = state.populationsById[popFilter];
+    parts.push("有「" + (p ? p.name : popFilter) + "」人口");
+  }
+  if (parts.length) {
+    statusEl.textContent = "高亮：" + parts.join("且") + "的據點（" + matchCount() + " 處）";
   } else {
     statusEl.textContent = "點擊左側兵裝可高亮對應據點，點擊據點查看兵裝與材料";
   }

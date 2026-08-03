@@ -8,7 +8,10 @@
         "皮": 166,
         "鐵": 166
       },
-      "tier": 3
+      "tier": 3,
+      "population": [
+        "xiangyong"
+      ]
     },
     {
       "id": "yuanrongnubing",
@@ -20,7 +23,10 @@
         "韌皮": 10,
         "精鐵": 10
       },
-      "tier": 4
+      "tier": 4,
+      "population": [
+        "shuzhongjingzhuang"
+      ]
     },
     {
       "id": "xiandengsishi",
@@ -32,7 +38,10 @@
         "韌皮": 10,
         "精鐵": 10
       },
-      "tier": 4.5
+      "tier": 4.5,
+      "population": [
+        "hebeizhuangshi"
+      ]
     },
     {
       "id": "jizhoudajishi",
@@ -44,7 +53,10 @@
         "韌皮": 7,
         "精鐵": 7
       },
-      "tier": 4
+      "tier": 4,
+      "population": [
+        "hebeizhuangshi"
+      ]
     },
     {
       "id": "dahanyulinjun",
@@ -56,7 +68,10 @@
         "韌皮": 46,
         "精鐵": 46
       },
-      "tier": 5
+      "tier": 5,
+      "population": [
+        "jiangdongyiyong"
+      ]
     },
     {
       "id": "bingzhouchiji",
@@ -68,7 +83,10 @@
         "韌皮": 61,
         "精鐵": 61
       },
-      "tier": 5
+      "tier": 5,
+      "population": [
+        "hebeizhuangshi"
+      ]
     },
     {
       "id": "elaiying",
@@ -80,7 +98,10 @@
         "韌皮": 31,
         "精鐵": 31
       },
-      "tier": 4.5
+      "tier": 4.5,
+      "population": [
+        "zhongyuanzhuangding"
+      ]
     },
     {
       "id": "fanchengtiewei",
@@ -90,7 +111,10 @@
         "皮": 111,
         "鐵": 111
       },
-      "tier": 3
+      "tier": 3,
+      "population": [
+        "jiangdongyiyong"
+      ]
     },
     {
       "id": "hengjiangsheshi",
@@ -100,7 +124,10 @@
         "皮": 142,
         "鐵": 142
       },
-      "tier": 3
+      "tier": 3,
+      "population": [
+        "jiangdongyiyong"
+      ]
     },
     {
       "id": "jiangdongfeishuo",
@@ -110,7 +137,10 @@
         "皮": 142,
         "鐵": 142
       },
-      "tier": 3
+      "tier": 3,
+      "population": [
+        "jiangdongyiyong"
+      ]
     },
     {
       "id": "heshuoqiangnuwei",
@@ -122,7 +152,10 @@
         "韌皮": 50,
         "精鐵": 50
       },
-      "tier": 5
+      "tier": 5,
+      "population": [
+        "hebeizhuangshi"
+      ]
     },
     {
       "id": "bohaiqiangwei",
@@ -132,7 +165,10 @@
         "皮": 142,
         "鐵": 142
       },
-      "tier": 3
+      "tier": 3,
+      "population": [
+        "qingxuyishi"
+      ]
     },
     {
       "id": "wuhuanlangqi",
@@ -142,7 +178,10 @@
         "皮": 187,
         "鐵": 187
       },
-      "tier": 3
+      "tier": 3,
+      "population": [
+        "biandixiaoyong"
+      ]
     },
     {
       "id": "wudangfeijun",
@@ -154,7 +193,10 @@
         "韌皮": 13,
         "精鐵": 13
       },
-      "tier": 4.5
+      "tier": 4.5,
+      "population": [
+        "shuzhongjingzhuang"
+      ]
     },
     {
       "id": "baierbing",
@@ -166,7 +208,10 @@
         "韌皮": 34,
         "精鐵": 34
       },
-      "tier": 5
+      "tier": 5,
+      "population": [
+        "shuzhongjingzhuang"
+      ]
     },
     {
       "id": "baimayicong",
@@ -178,7 +223,10 @@
         "韌皮": 61,
         "精鐵": 61
       },
-      "tier": 5
+      "tier": 5,
+      "population": [
+        "hebeizhuangshi"
+      ]
     },
     {
       "id": "tengjiabing",
@@ -188,7 +236,10 @@
         "皮": 125,
         "鐵": 125
       },
-      "tier": 3.5
+      "tier": 3.5,
+      "population": [
+        "shuzhongjingzhuang"
+      ]
     },
     {
       "id": "huweijun",
@@ -200,7 +251,10 @@
         "韌皮": 10,
         "精鐵": 10
       },
-      "tier": 4
+      "tier": 4,
+      "population": [
+        "zhongyuanzhuangding"
+      ]
     },
     {
       "id": "hubaoji",
@@ -212,7 +266,10 @@
         "韌皮": 55,
         "精鐵": 55
       },
-      "tier": 5
+      "tier": 5,
+      "population": [
+        "zhongyuanzhuangding"
+      ]
     },
     {
       "id": "xiliangtieqi",
@@ -224,7 +281,10 @@
         "韌皮": 16,
         "精鐵": 16
       },
-      "tier": 4
+      "tier": 4,
+      "population": [
+        "biandixiaoyong"
+      ]
     },
     {
       "id": "jiefanbing",
@@ -236,7 +296,10 @@
         "韌皮": 43,
         "精鐵": 43
       },
-      "tier": 5
+      "tier": 5,
+      "population": [
+        "jiangdongyiyong"
+      ]
     },
     {
       "id": "jiefanhuobu",
@@ -248,7 +311,10 @@
         "韌皮": 18,
         "精鐵": 18
       },
-      "tier": 4.5
+      "tier": 4.5,
+      "population": [
+        "jiangdongyiyong"
+      ]
     },
     {
       "id": "qiaoruiwei",
@@ -260,7 +326,10 @@
         "韌皮": 7,
         "精鐵": 7
       },
-      "tier": 4
+      "tier": 4,
+      "population": [
+        "zhongyuanzhuangding"
+      ]
     },
     {
       "id": "meiwuhuogongshou",
@@ -272,7 +341,10 @@
         "韌皮": 12,
         "精鐵": 12
       },
-      "tier": 4
+      "tier": 4,
+      "population": [
+        "biandixiaoyong"
+      ]
     },
     {
       "id": "xianzhenying",
@@ -284,7 +356,10 @@
         "韌皮": 39,
         "精鐵": 39
       },
-      "tier": 5
+      "tier": 5,
+      "population": [
+        "qingxuyishi"
+      ]
     },
     {
       "id": "yongliangfeixiongjun",
@@ -296,7 +371,10 @@
         "韌皮": 61,
         "精鐵": 61
       },
-      "tier": 5
+      "tier": 5,
+      "population": [
+        "biandixiaoyong"
+      ]
     },
     {
       "id": "qingzhoubing",
@@ -306,7 +384,10 @@
         "皮": 142,
         "鐵": 142
       },
-      "tier": 3.5
+      "tier": 3.5,
+      "population": [
+        "qingxuyishi"
+      ]
     },
     {
       "id": "qinglongwei",
@@ -318,7 +399,10 @@
         "韌皮": 299,
         "精鐵": 299
       },
-      "tier": 5
+      "tier": 5,
+      "population": [
+        "zhongyuanzhuangding"
+      ]
     },
     {
       "id": "jinghanjun",
@@ -330,7 +414,10 @@
         "韌皮": 39,
         "精鐵": 39
       },
-      "tier": 5
+      "tier": 5,
+      "population": [
+        "shuzhongjingzhuang"
+      ]
     },
     {
       "id": "weiwuruishi",
@@ -342,7 +429,10 @@
         "韌皮": 36,
         "精鐵": 36
       },
-      "tier": 5
+      "tier": 5,
+      "population": [
+        "zhongyuanzhuangding"
+      ]
     },
     {
       "id": "huangjinfushuituan",
@@ -352,7 +442,10 @@
         "皮": 142,
         "鐵": 142
       },
-      "tier": 3.5
+      "tier": 3.5,
+      "population": [
+        "xiangyong"
+      ]
     },
     {
       "id": "daopaishou",
@@ -360,7 +453,10 @@
       "image": "assets/soldier/2_daopaishou.png",
       "materials": {},
       "craftable": false,
-      "tier": 2
+      "tier": 2,
+      "population": [
+        "xiangyong"
+      ]
     },
     {
       "id": "gongjiangtuan",
@@ -368,7 +464,10 @@
       "image": "assets/soldier/2_gongjiangtuan.png",
       "materials": {},
       "craftable": false,
-      "tier": 2
+      "tier": 2,
+      "population": [
+        "xiangyong"
+      ]
     },
     {
       "id": "gongjianwei",
@@ -376,7 +475,10 @@
       "image": "assets/soldier/1_gongjianwei.png",
       "materials": {},
       "craftable": false,
-      "tier": 1
+      "tier": 1,
+      "population": [
+        "xiangyong"
+      ]
     },
     {
       "id": "nuwei",
@@ -384,7 +486,10 @@
       "image": "assets/soldier/2_nuwei.png",
       "materials": {},
       "craftable": false,
-      "tier": 2
+      "tier": 2,
+      "population": [
+        "xiangyong"
+      ]
     },
     {
       "id": "caiyaodui",
@@ -392,7 +497,10 @@
       "image": "assets/soldier/2_caiyaodui.png",
       "materials": {},
       "craftable": false,
-      "tier": 2
+      "tier": 2,
+      "population": [
+        "xiangyong"
+      ]
     },
     {
       "id": "tuqiying",
@@ -400,7 +508,10 @@
       "image": "assets/soldier/2.5_tuqiying.png",
       "materials": {},
       "craftable": false,
-      "tier": 2.5
+      "tier": 2.5,
+      "population": [
+        "xiangyong"
+      ]
     },
     {
       "id": "changqiangying",
@@ -408,7 +519,10 @@
       "image": "assets/soldier/1_changqiangying.png",
       "materials": {},
       "craftable": false,
-      "tier": 1
+      "tier": 1,
+      "population": [
+        "xiangyong"
+      ]
     }
   ]
 }
