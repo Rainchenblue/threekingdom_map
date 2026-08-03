@@ -115,6 +115,90 @@ body {
 
 #markersLayer { position: absolute; inset: 0; pointer-events: none; }
 
+#resourcesLayer { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+
+.res-point {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+  transform: translate(-50%, -50%);
+}
+
+.res-point:hover {
+  transform: translate(-50%, -50%) scale(1.7);
+  z-index: 3;
+}
+
+.res-point .res-label {
+  position: absolute;
+  left: 8px;
+  top: -6px;
+  white-space: nowrap;
+  font-size: 11px;
+  color: #fff;
+  background: rgba(20, 22, 28, 0.85);
+  border-radius: 4px;
+  padding: 1px 6px;
+  display: none;
+  pointer-events: none;
+}
+
+.res-point:hover .res-label { display: block; }
+
+.res-control {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 14;
+  max-width: 300px;
+  background: rgba(29, 33, 41, 0.92);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.res-control-title {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.res-control-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.res-control-btns button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.res-control-btns button:hover { border-color: var(--gold); }
+
+.res-control-btns button.on { border-color: var(--gold); }
+.res-control-btns button.off { opacity: 0.45; }
+
+.res-control-btns .r-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
 .marker {
   position: absolute;
   transform: translate(-50%, -100%);
@@ -124,6 +208,7 @@ body {
   pointer-events: auto;
   cursor: pointer;
   transition: opacity 0.25s, filter 0.25s, transform 0.25s;
+  z-index: 1;
 }
 
 .marker .pin {
@@ -517,6 +602,7 @@ body {
   .map-panel { flex-direction: column; overflow: visible; }
   .map-viewport { padding: 10px; }
   .map-wrap { width: 640px; min-width: 0; }
+  .res-control { position: static; max-width: none; margin: 8px 10px 0; }
   .sidebar { width: 100%; border-left: none; border-top: 1px solid var(--border); }
   .pop-list { max-height: 55vh; }
   #itemList { max-height: 55vh; }

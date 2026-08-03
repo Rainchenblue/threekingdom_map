@@ -6,6 +6,8 @@ const state = {
   populations: [],
   populationsById: {},
   markers: [],
+  resources: [],
+  resourceVisible: {},
   selectedMarkerId: null,
   activeFilter: null,
   activePopulation: null,
@@ -19,6 +21,8 @@ const state = {
 const mapViewport = document.getElementById("mapViewport");
 const mapWrap = document.getElementById("mapWrap");
 const markersLayer = document.getElementById("markersLayer");
+const resourcesLayer = document.getElementById("resourcesLayer");
+const resTypeBtns = document.getElementById("resTypeBtns");
 const itemList = document.getElementById("itemList");
 const popList = document.getElementById("popList");
 const dpName = document.getElementById("dpName");
@@ -51,6 +55,17 @@ const RES_ICON = {
   精鐵: "assets/resources/jingtie.png",
 };
 
+const RESOURCE_TYPES = [
+  { id: "pi", name: "皮", color: "#a1887f" },
+  { id: "tie", name: "鐵", color: "#90a4ae" },
+  { id: "shi", name: "石", color: "#9e9e9e" },
+  { id: "mu", name: "木", color: "#5d4037" },
+  { id: "liang", name: "糧", color: "#ffb74d" },
+  { id: "ma", name: "馬", color: "#b39ddb" },
+  { id: "yizhan", name: "驛站", color: "#4db6ac" },
+  { id: "guankou", name: "關口", color: "#ef5350" },
+];
+
 function makeChip(mat, need, checkRes) {
   const chip = document.createElement("span");
   chip.className = "mat-chip mat-" + mat;
@@ -70,26 +85,31 @@ init();
 
 async function init() {
   try {
-    const [itemsRes, markersRes, popsRes] = await Promise.all([
+    const [itemsRes, markersRes, popsRes, resourcesRes] = await Promise.all([
       fetch("data/items.json"),
       fetch("data/markers.json"),
       fetch("data/populations.json"),
+      fetch("data/resources.json"),
     ]);
-    if (!itemsRes.ok || !markersRes.ok || !popsRes.ok) throw new Error("資料載入失敗");
+    if (!itemsRes.ok || !markersRes.ok || !popsRes.ok || !resourcesRes.ok) throw new Error("資料載入失敗");
     const itemsData = await itemsRes.json();
     const markersData = await markersRes.json();
     const popsData = await popsRes.json();
+    const resourcesData = await resourcesRes.json();
 
     state.items = itemsData.items;
     state.markers = markersData.markers;
     for (const it of state.items) state.itemsById[it.id] = it;
     state.populations = popsData.populations || [];
     for (const p of state.populations) state.populationsById[p.id] = p;
+    state.resources = resourcesData.resources || [];
 
     loadPlayerRes();
     renderSidebar();
     renderPopList();
     renderMarkers();
+    renderResources();
+    buildResTypeBtns();
     applyView();
     renderPanel();
   } catch (err) {
@@ -215,6 +235,57 @@ function renderMarkers() {
     });
     markersLayer.appendChild(div);
   });
+}
+
+function resourceType(type) {
+  return RESOURCE_TYPES.find((t) => t.id === type) || RESOURCE_TYPES[0];
+}
+
+function renderResources() {
+  resourcesLayer.innerHTML = "";
+  state.resources.forEach((r) => {
+    const t = resourceType(r.type);
+    const div = document.createElement("div");
+    div.className = "res-point";
+    div.dataset.resType = r.type;
+    div.style.left = r.x + "%";
+    div.style.top = r.y + "%";
+    div.style.background = t.color;
+
+    const label = document.createElement("div");
+    label.className = "res-label";
+    label.textContent = (r.name ? r.name + " · " : "") + t.name;
+    div.appendChild(label);
+
+    resourcesLayer.appendChild(div);
+  });
+  applyResourceVisibility();
+}
+
+function buildResTypeBtns() {
+  resTypeBtns.innerHTML = "";
+  for (const t of RESOURCE_TYPES) {
+    if (state.resourceVisible[t.id] === undefined) state.resourceVisible[t.id] = true;
+    const b = document.createElement("button");
+    b.dataset.type = t.id;
+    b.innerHTML = '<span class="r-dot" style="background:' + t.color + '"></span>' + t.name;
+    b.addEventListener("click", () => {
+      state.resourceVisible[t.id] = !state.resourceVisible[t.id];
+      applyResourceVisibility();
+    });
+    resTypeBtns.appendChild(b);
+  }
+  applyResourceVisibility();
+}
+
+function applyResourceVisibility() {
+  for (const b of resTypeBtns.children) {
+    b.classList.toggle("on", !!state.resourceVisible[b.dataset.type]);
+    b.classList.toggle("off", !state.resourceVisible[b.dataset.type]);
+  }
+  for (const el of resourcesLayer.children) {
+    el.style.display = state.resourceVisible[el.dataset.resType] ? "" : "none";
+  }
 }
 
 function isInactiveFilter() {
