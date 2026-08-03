@@ -21,7 +21,7 @@
   main { flex: 1; display: flex; min-height: 0; }
   #viewport { flex: 1; overflow: auto; position: relative; background: #14161a; }
   #stage { position: relative; transform-origin: 0 0; }
-  #stage img { display: block; pointer-events: none; user-select: none; }
+  #stage img { display: block; pointer-events: none; user-select: none; width: 100%; height: 100%; }
   #overlay { position: absolute; top: 0; left: 0; }
   .marker { position: absolute; width: 0; height: 0; }
   .marker .dot { position: absolute; width: 12px; height: 12px; border-radius: 50%;
@@ -68,6 +68,7 @@
   <button id="clearBtn" class="danger">清除全部</button>
   <span class="count" id="count">0 個標點</span>
   <span class="spacer"></span>
+  <button id="editModeBtn" class="primary">編輯：開</button>
   <button id="resetViewBtn">重設視圖</button>
   <button id="one2oneBtn">1:1</button>
   <button id="zinBtn">＋</button>
@@ -77,7 +78,7 @@
 
 <main>
   <div id="viewport">
-    <div class="hint">先選右側類型，再點擊地圖新增｜拖曳圓點調整位置｜點擊圓點編輯</div>
+    <div class="hint">拖曳地圖空白處＝移動地圖｜點擊空白＝新增所選類型｜拖曳圓點＝微調位置</div>
     <div id="stage">
       <img id="mapImg" src="../assets/map.png" alt="地圖">
       <div id="overlay"></div>
@@ -158,7 +159,9 @@ let markers = []; // {id, type, name, x, y, el}
 let selected = null;
 let nextId = 1;
 let drag = null;
+let pan = null;
 let placeType = 'pi';
+let placeMode = true;
 
 function clientToPct(cx, cy) {
   const rect = viewport.getBoundingClientRect();
@@ -376,13 +379,37 @@ function buildTypeUI() {
 
 overlay.addEventListener('pointerdown', (e) => {
   if (e.target !== overlay || e.button !== 0) return;
-  const p = clientToPct(e.clientX, e.clientY);
-  addMarker(p.x, p.y, placeType);
+  pan = { startX: e.clientX, startY: e.clientY, sl: viewport.scrollLeft, st: viewport.scrollTop, moved: false };
+  overlay.setPointerCapture(e.pointerId);
 });
 
-overlay.addEventListener('pointermove', moveDrag);
-overlay.addEventListener('pointerup', endDrag);
-overlay.addEventListener('pointercancel', endDrag);
+overlay.addEventListener('pointermove', (e) => {
+  if (drag) { moveDrag(e); return; }
+  if (!pan) return;
+  const dx = e.clientX - pan.startX;
+  const dy = e.clientY - pan.startY;
+  if (!pan.moved && Math.abs(dx) + Math.abs(dy) > 5) pan.moved = true;
+  if (pan.moved) {
+    viewport.scrollLeft = pan.sl - dx;
+    viewport.scrollTop = pan.st - dy;
+  }
+});
+
+overlay.addEventListener('pointerup', (e) => {
+  if (drag) { endDrag(e); return; }
+  if (!pan) return;
+  const isClick = !pan.moved;
+  pan = null;
+  if (isClick && placeMode) {
+    const p = clientToPct(e.clientX, e.clientY);
+    addMarker(p.x, p.y, placeType);
+  }
+});
+
+overlay.addEventListener('pointercancel', () => {
+  if (drag) endDrag(null);
+  pan = null;
+});
 
 viewport.addEventListener('wheel', (e) => {
   e.preventDefault();
@@ -446,6 +473,13 @@ centerBtn.addEventListener('click', () => {
 });
 
 document.getElementById('resetViewBtn').addEventListener('click', () => centerMap());
+
+const editModeBtn = document.getElementById('editModeBtn');
+editModeBtn.addEventListener('click', () => {
+  placeMode = !placeMode;
+  editModeBtn.textContent = '編輯：' + (placeMode ? '開' : '關');
+  editModeBtn.classList.toggle('primary', placeMode);
+});
 
 document.getElementById('one2oneBtn').addEventListener('click', () => {
   scale = 1;

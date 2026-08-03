@@ -21,7 +21,7 @@
   main { flex: 1; display: flex; min-height: 0; }
   #viewport { flex: 1; overflow: auto; position: relative; background: #14161a; }
   #stage { position: relative; transform-origin: 0 0; }
-  #stage img { display: block; pointer-events: none; user-select: none; }
+  #stage img { display: block; pointer-events: none; user-select: none; width: 100%; height: 100%; }
   #overlay { position: absolute; top: 0; left: 0; }
   .marker { position: absolute; width: 0; height: 0; }
   .marker .dot { position: absolute; width: 12px; height: 12px; border-radius: 50%;
@@ -160,6 +160,15 @@ function centerMap() {
   viewport.scrollTop = (stage.clientHeight - viewport.clientHeight) / 2;
 }
 
+function clientToPct(cx, cy) {
+  const rect = viewport.getBoundingClientRect();
+  const vx = cx - rect.left + viewport.scrollLeft;
+  const vy = cy - rect.top + viewport.scrollTop;
+  const x = Math.round(vx / scale / NAT_W * 10000) / 100;
+  const y = Math.round(vy / scale / NAT_H * 10000) / 100;
+  return { x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) };
+}
+
 function zoomAt(cx, cy, factor) {
   const wx = cx + viewport.scrollLeft;
   const wy = cy + viewport.scrollTop;
@@ -206,23 +215,18 @@ function renderMarker(m) {
 }
 
 function startDrag(e, m) {
-  drag = { m, startX: e.clientX, startY: e.clientY, ox: m.x, oy: m.y };
+  drag = { m, startX: e.clientX, startY: e.clientY };
   m.el.classList.add('drag');
   overlay.setPointerCapture(e.pointerId);
 }
 
 function moveDrag(e) {
   if (!drag) return;
-  const dx = (e.clientX - drag.startX) / scale;
-  const dy = (e.clientY - drag.startY) / scale;
-  let nx = drag.ox + dx / NAT_W * 100;
-  let ny = drag.oy + dy / NAT_H * 100;
-  nx = Math.max(0, Math.min(100, nx));
-  ny = Math.max(0, Math.min(100, ny));
-  drag.m.x = Math.round(nx * 100) / 100;
-  drag.m.y = Math.round(ny * 100) / 100;
-  drag.m.el.style.left = drag.m.x + '%';
-  drag.m.el.style.top = drag.m.y + '%';
+  const p = clientToPct(e.clientX, e.clientY);
+  drag.m.x = p.x;
+  drag.m.y = p.y;
+  drag.m.el.style.left = p.x + '%';
+  drag.m.el.style.top = p.y + '%';
 }
 
 function endDrag(e) {
@@ -266,10 +270,8 @@ function refreshAll() {
 
 overlay.addEventListener('pointerdown', (e) => {
   if (e.target !== overlay || e.button !== 0) return;
-  const rect = stage.getBoundingClientRect();
-  const xPct = ((e.clientX - rect.left) / rect.width) * 100;
-  const yPct = ((e.clientY - rect.top) / rect.height) * 100;
-  addMarker(xPct, yPct);
+  const p = clientToPct(e.clientX, e.clientY);
+  addMarker(p.x, p.y);
 });
 
 overlay.addEventListener('pointermove', moveDrag);
