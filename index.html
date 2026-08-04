@@ -9,6 +9,10 @@
 <body>
   <header class="app-header">
     <h1>三國兵裝據點地圖 <span class="update-date">20260803</span></h1>
+    <div class="mode-switch" id="modeSwitch">
+      <button class="mode-btn active" data-mode="craft">兵裝</button>
+      <button class="mode-btn" data-mode="resource">資源點</button>
+    </div>
     <div class="header-status" id="status"></div>
     <button id="resetBtn" class="reset-btn" title="清除選取與高亮">重設</button>
   </header>
@@ -23,7 +27,7 @@
         </div>
       </div>
       <div class="res-control" id="resControl">
-        <div class="res-control-title">資源點（點擊切換顯示）</div>
+        <div class="res-control-title">資源類型（點擊切換顯示）</div>
         <div class="res-control-btns" id="resTypeBtns"></div>
       </div>
       <div class="zoom-controls">

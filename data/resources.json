@@ -1,7 +1,7 @@
 {
   "resources": [
-    { "id": "r2", "type": "liang", "name": "", "x": 42.98, "y": 73.28 },
-    { "id": "r3", "type": "mu", "name": "", "x": 44.23, "y": 73.23 },
-    { "id": "r4", "type": "pi", "name": "", "x": 40.22, "y": 70.73 }
+    { "id": "r2", "type": "liang", "name": "", "x": 42.98, "y": 73.28, "level": 2 },
+    { "id": "r3", "type": "mu", "name": "", "x": 44.23, "y": 73.23, "level": 1 },
+    { "id": "r4", "type": "pi", "name": "", "x": 40.22, "y": 70.73, "level": 3 }
   ]
 }

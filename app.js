@@ -16,6 +16,8 @@ const state = {
   qty: 1,
   resCheck: false,
   playerRes: { 皮: 0, 鐵: 0, 韌皮: 0, 精鐵: 0 },
+  mode: "craft",
+  visited: {},
 };
 
 const mapViewport = document.getElementById("mapViewport");
@@ -42,6 +44,8 @@ const resetBtn = document.getElementById("resetBtn");
 const zoomInBtn = document.getElementById("zoomInBtn");
 const zoomOutBtn = document.getElementById("zoomOutBtn");
 const zoomResetBtn = document.getElementById("zoomResetBtn");
+const modeSwitch = document.getElementById("modeSwitch");
+const mapImg = document.getElementById("mapImg");
 
 const isMobile = () => window.matchMedia("(max-width: 900px)").matches;
 
@@ -65,6 +69,15 @@ const RESOURCE_TYPES = [
   { id: "yizhan", name: "驛站", color: "#4db6ac" },
   { id: "guankou", name: "關口", color: "#ef5350" },
 ];
+
+const LEVEL_COLORS = {
+  1: "#ffffff",
+  2: "#4caf72",
+  3: "#4a90d9",
+  4: "#9a6bd1",
+};
+
+const LEVEL_NAMES = { 1: "Lv.1", 2: "Lv.2", 3: "Lv.3", 4: "Lv.4" };
 
 function makeChip(mat, need, checkRes) {
   const chip = document.createElement("span");
@@ -105,6 +118,7 @@ async function init() {
     state.resources = resourcesData.resources || [];
 
     loadPlayerRes();
+    loadVisited();
     renderSidebar();
     renderPopList();
     renderMarkers();
@@ -112,6 +126,7 @@ async function init() {
     buildResTypeBtns();
     applyView();
     renderPanel();
+    initModeSwitch();
   } catch (err) {
     statusEl.textContent = "⚠ 資料載入失敗：" + err.message;
   }
@@ -245,17 +260,32 @@ function renderResources() {
   resourcesLayer.innerHTML = "";
   state.resources.forEach((r) => {
     const t = resourceType(r.type);
+    const lv = r.level || 1;
+    const lvColor = LEVEL_COLORS[lv] || LEVEL_COLORS[1];
+
     const div = document.createElement("div");
-    div.className = "res-point";
+    div.className = "res-point" + (state.visited[r.id] ? " visited" : "");
+    div.dataset.resId = r.id;
     div.dataset.resType = r.type;
     div.style.left = r.x + "%";
     div.style.top = r.y + "%";
-    div.style.background = t.color;
+    div.style.setProperty("--lv-color", lvColor);
+
+    const inner = document.createElement("div");
+    inner.className = "res-inner";
+    inner.style.background = t.color;
 
     const label = document.createElement("div");
     label.className = "res-label";
-    label.textContent = (r.name ? r.name + " · " : "") + t.name;
+    label.textContent = (r.name ? r.name + " · " : "") + t.name + " · " + (LEVEL_NAMES[lv] || "Lv.1");
+
+    div.appendChild(inner);
     div.appendChild(label);
+
+    div.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleVisited(r.id);
+    });
 
     resourcesLayer.appendChild(div);
   });
@@ -285,6 +315,76 @@ function applyResourceVisibility() {
   }
   for (const el of resourcesLayer.children) {
     el.style.display = state.resourceVisible[el.dataset.resType] ? "" : "none";
+  }
+}
+
+function loadVisited() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("sanguo_visited") || "{}");
+    state.visited = saved;
+  } catch (e) { state.visited = {}; }
+}
+
+function saveVisited() {
+  try {
+    localStorage.setItem("sanguo_visited", JSON.stringify(state.visited));
+  } catch (e) { /* ignore */ }
+}
+
+function toggleVisited(resId) {
+  if (state.visited[resId]) {
+    delete state.visited[resId];
+  } else {
+    state.visited[resId] = true;
+  }
+  saveVisited();
+  const el = resourcesLayer.querySelector('[data-res-id="' + resId + '"]');
+  if (el) el.classList.toggle("visited", !!state.visited[resId]);
+}
+
+function initModeSwitch() {
+  const btns = modeSwitch.querySelectorAll(".mode-btn");
+  btns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      switchMode(btn.dataset.mode);
+    });
+  });
+  applyMode();
+}
+
+function switchMode(mode) {
+  if (state.mode === mode) return;
+  state.mode = mode;
+  clearSelection();
+  clearFilter();
+  applyMode();
+  resetZoom();
+}
+
+function applyMode() {
+  const isResource = state.mode === "resource";
+  document.body.classList.toggle("mode-resource", isResource);
+  document.body.classList.toggle("mode-craft", !isResource);
+
+  const btns = modeSwitch.querySelectorAll(".mode-btn");
+  btns.forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.mode === state.mode);
+  });
+
+  if (isResource) {
+    mapImg.src = "assets/resource-map.png";
+    mapImg.onload = () => {
+      computeBaseW();
+      resetZoom();
+    };
+    statusEl.textContent = "點擊資源點標記「已採過」，再點一次取消";
+  } else {
+    mapImg.src = "assets/map.png";
+    mapImg.onload = () => {
+      computeBaseW();
+      resetZoom();
+    };
+    applyView();
   }
 }
 
@@ -341,6 +441,7 @@ function clearFilter() {
 }
 
 function applyView() {
+  if (state.mode === "resource") return;
   const filter = state.activeFilter;
   const popFilter = state.activePopulation;
   const inactiveFilter = isInactiveFilter();
