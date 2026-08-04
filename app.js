@@ -626,17 +626,22 @@ function computeBaseW() {
   state.baseW = mapWrap.clientWidth;
 }
 
+function mapAspect() {
+  return state.mode === "resource" ? 1246 / 2000 : 771 / 1122;
+}
+
 function applyZoom(z, keepCenter) {
   if (!state.baseW) computeBaseW();
   const prevW = state.baseW * state.zoom;
   state.zoom = Math.min(3, Math.max(0.5, z));
   const newW = state.baseW * state.zoom;
+  const aspect = mapAspect();
 
   if (keepCenter) {
     const vw = mapViewport.clientWidth;
     const vh = mapViewport.clientHeight;
-    const prevH = prevW * (771 / 1122);
-    const newH = newW * (771 / 1122);
+    const prevH = prevW * aspect;
+    const newH = newW * aspect;
     const offXBefore = Math.max(16, (vw - prevW) / 2);
     const offXAfter = Math.max(16, (vw - newW) / 2);
     const offYBefore = Math.max(16, (vh - prevH) / 2);
@@ -661,6 +666,13 @@ function resetZoom() {
 zoomInBtn.addEventListener("click", () => applyZoom(state.zoom * 1.25, true));
 zoomOutBtn.addEventListener("click", () => applyZoom(state.zoom / 1.25, true));
 zoomResetBtn.addEventListener("click", resetZoom);
+
+mapViewport.addEventListener("wheel", (e) => {
+  if (Math.abs(e.deltaY) < 1) return;
+  e.preventDefault();
+  const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+  applyZoom(state.zoom * factor, true);
+}, { passive: false });
 
 let dragState = null;
 
