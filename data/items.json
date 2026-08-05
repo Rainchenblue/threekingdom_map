@@ -5,8 +5,8 @@
       "name": "丹陽兵",
       "image": "assets/soldier/3_danyangbing.png",
       "materials": {
-        "皮": 166,
-        "鐵": 166
+        "皮": 83,
+        "鐵": 83
       },
       "tier": 3,
       "population": [
@@ -18,8 +18,8 @@
       "name": "元戎弩兵",
       "image": "assets/soldier/4_yuanrongnubing.png",
       "materials": {
-        "皮": 285,
-        "鐵": 285,
+        "皮": 142,
+        "鐵": 142,
         "韌皮": 10,
         "精鐵": 10
       },
@@ -33,8 +33,8 @@
       "name": "先登死士",
       "image": "assets/soldier/4.5_xiandengsishi.png",
       "materials": {
-        "皮": 285,
-        "鐵": 285,
+        "皮": 142,
+        "鐵": 142,
         "韌皮": 10,
         "精鐵": 10
       },
@@ -48,8 +48,8 @@
       "name": "冀州大戟士",
       "image": "assets/soldier/4_jizhoudajishi.png",
       "materials": {
-        "皮": 214,
-        "鐵": 214,
+        "皮": 107,
+        "鐵": 107,
         "韌皮": 7,
         "精鐵": 7
       },
@@ -63,10 +63,10 @@
       "name": "大漢羽林軍",
       "image": "assets/soldier/5_dahanyulinjun.png",
       "materials": {
-        "皮": 833,
-        "鐵": 833,
-        "韌皮": 46,
-        "精鐵": 46
+        "皮": 416,
+        "鐵": 416,
+        "韌皮": 30,
+        "精鐵": 30
       },
       "tier": 5,
       "population": [
@@ -78,10 +78,10 @@
       "name": "并州赤騎",
       "image": "assets/soldier/5_bingzhouchiji.png",
       "materials": {
-        "皮": 1111,
-        "鐵": 1111,
-        "韌皮": 61,
-        "精鐵": 61
+        "皮": 555,
+        "鐵": 555,
+        "韌皮": 41,
+        "精鐵": 41
       },
       "tier": 5,
       "population": [
@@ -93,10 +93,10 @@
       "name": "惡來營",
       "image": "assets/soldier/4.5_elaiying.png",
       "materials": {
-        "皮": 857,
-        "鐵": 857,
-        "韌皮": 31,
-        "精鐵": 31
+        "皮": 333,
+        "鐵": 333,
+        "韌皮": 24,
+        "精鐵": 24
       },
       "tier": 4.5,
       "population": [
@@ -108,8 +108,8 @@
       "name": "樊城鐵衛",
       "image": "assets/soldier/3_fanchengtiewei.png",
       "materials": {
-        "皮": 111,
-        "鐵": 111
+        "皮": 55,
+        "鐵": 55
       },
       "tier": 3,
       "population": [
@@ -121,8 +121,8 @@
       "name": "橫江射士",
       "image": "assets/soldier/3_hengjiangsheshi.png",
       "materials": {
-        "皮": 142,
-        "鐵": 142
+        "皮": 71,
+        "鐵": 71
       },
       "tier": 3,
       "population": [
@@ -134,8 +134,8 @@
       "name": "江東飛槊",
       "image": "assets/soldier/3_jiangdongfeishuo.png",
       "materials": {
-        "皮": 142,
-        "鐵": 142
+        "皮": 71,
+        "鐵": 71
       },
       "tier": 3,
       "population": [
@@ -147,10 +147,10 @@
       "name": "河朔強弩衛",
       "image": "assets/soldier/5_heshuoqiangnuwei.png",
       "materials": {
-        "皮": 909,
-        "鐵": 909,
-        "韌皮": 50,
-        "精鐵": 50
+        "皮": 454,
+        "鐵": 454,
+        "韌皮": 33,
+        "精鐵": 33
       },
       "tier": 5,
       "population": [
@@ -162,8 +162,8 @@
       "name": "渤海槍衛",
       "image": "assets/soldier/3_bohaiqiangwei.png",
       "materials": {
-        "皮": 142,
-        "鐵": 142
+        "皮": 71,
+        "鐵": 71
       },
       "tier": 3,
       "population": [
@@ -175,8 +175,8 @@
       "name": "烏桓狼騎",
       "image": "assets/soldier/3_wuhuanlangqi.png",
       "materials": {
-        "皮": 187,
-        "鐵": 187
+        "皮": 93,
+        "鐵": 93
       },
       "tier": 3,
       "population": [
@@ -188,8 +188,8 @@
       "name": "無當飛軍",
       "image": "assets/soldier/4.5_wudangfeijun.png",
       "materials": {
-        "皮": 375,
-        "鐵": 375,
+        "皮": 187,
+        "鐵": 187,
         "韌皮": 13,
         "精鐵": 13
       },
@@ -203,10 +203,10 @@
       "name": "白毦兵",
       "image": "assets/soldier/5_baierbing.png",
       "materials": {
-        "皮": 625,
-        "鐵": 625,
-        "韌皮": 34,
-        "精鐵": 34
+        "皮": 312,
+        "鐵": 312,
+        "韌皮": 23,
+        "精鐵": 23
       },
       "tier": 5,
       "population": [
@@ -218,10 +218,10 @@
       "name": "白馬義從",
       "image": "assets/soldier/5_baimayicong.png",
       "materials": {
-        "皮": 1111,
-        "鐵": 1111,
-        "韌皮": 61,
-        "精鐵": 61
+        "皮": 555,
+        "鐵": 555,
+        "韌皮": 41,
+        "精鐵": 41
       },
       "tier": 5,
       "population": [
@@ -233,8 +233,8 @@
       "name": "藤甲兵",
       "image": "assets/soldier/3.5_tengjiabing.png",
       "materials": {
-        "皮": 125,
-        "鐵": 125
+        "皮": 62,
+        "鐵": 62
       },
       "tier": 3.5,
       "population": [
@@ -246,8 +246,8 @@
       "name": "虎衛軍",
       "image": "assets/soldier/4_huweijun.png",
       "materials": {
-        "皮": 285,
-        "鐵": 285,
+        "皮": 142,
+        "鐵": 142,
         "韌皮": 10,
         "精鐵": 10
       },
@@ -261,10 +261,10 @@
       "name": "虎豹騎",
       "image": "assets/soldier/5_hubaoji.png",
       "materials": {
-        "皮": 1000,
-        "鐵": 1000,
-        "韌皮": 55,
-        "精鐵": 55
+        "皮": 500,
+        "鐵": 500,
+        "韌皮": 37,
+        "精鐵": 37
       },
       "tier": 5,
       "population": [
@@ -276,8 +276,8 @@
       "name": "西涼鐵騎",
       "image": "assets/soldier/4_xiliangtieqi.png",
       "materials": {
-        "皮": 444,
-        "鐵": 444,
+        "皮": 222,
+        "鐵": 222,
         "韌皮": 16,
         "精鐵": 16
       },
@@ -291,10 +291,10 @@
       "name": "解煩兵",
       "image": "assets/soldier/5_jiefanbing.png",
       "materials": {
-        "皮": 789,
-        "鐵": 789,
-        "韌皮": 43,
-        "精鐵": 43
+        "皮": 374,
+        "鐵": 374,
+        "韌皮": 29,
+        "精鐵": 29
       },
       "tier": 5,
       "population": [
@@ -306,8 +306,8 @@
       "name": "解煩火部",
       "image": "assets/soldier/4.5_jiefanhuobu.png",
       "materials": {
-        "皮": 500,
-        "鐵": 500,
+        "皮": 250,
+        "鐵": 250,
         "韌皮": 18,
         "精鐵": 18
       },
@@ -321,8 +321,8 @@
       "name": "譙銳衛",
       "image": "assets/soldier/4_qiaoruiwei.png",
       "materials": {
-        "皮": 200,
-        "鐵": 200,
+        "皮": 100,
+        "鐵": 100,
         "韌皮": 7,
         "精鐵": 7
       },
@@ -336,8 +336,8 @@
       "name": "郿塢火弓手",
       "image": "assets/soldier/4_meiwuhuogongshou.png",
       "materials": {
-        "皮": 333,
-        "鐵": 333,
+        "皮": 166,
+        "鐵": 166,
         "韌皮": 12,
         "精鐵": 12
       },
@@ -351,10 +351,10 @@
       "name": "陷陣營",
       "image": "assets/soldier/5_xianzhenying.png",
       "materials": {
-        "皮": 714,
-        "鐵": 714,
-        "韌皮": 39,
-        "精鐵": 39
+        "皮": 357,
+        "鐵": 357,
+        "韌皮": 26,
+        "精鐵": 26
       },
       "tier": 5,
       "population": [
@@ -366,10 +366,10 @@
       "name": "雍涼飛熊軍",
       "image": "assets/soldier/5_yongliangfeixiongjun.png",
       "materials": {
-        "皮": 1111,
-        "鐵": 1111,
-        "韌皮": 61,
-        "精鐵": 61
+        "皮": 555,
+        "鐵": 555,
+        "韌皮": 41,
+        "精鐵": 41
       },
       "tier": 5,
       "population": [
@@ -381,8 +381,8 @@
       "name": "青州兵",
       "image": "assets/soldier/3.5_qingzhoubing.png",
       "materials": {
-        "皮": 142,
-        "鐵": 142
+        "皮": 71,
+        "鐵": 71
       },
       "tier": 3.5,
       "population": [
@@ -394,10 +394,10 @@
       "name": "青龍衛",
       "image": "assets/soldier/5_qinglongwei.png",
       "materials": {
-        "皮": 2142,
-        "鐵": 2142,
-        "韌皮": 299,
-        "精鐵": 299
+        "皮": 1071,
+        "鐵": 1071,
+        "韌皮": 79,
+        "精鐵": 79
       },
       "tier": 5,
       "population": [
@@ -409,10 +409,10 @@
       "name": "靖漢軍",
       "image": "assets/soldier/5_jinghanjun.png",
       "materials": {
-        "皮": 714,
-        "鐵": 714,
-        "韌皮": 39,
-        "精鐵": 39
+        "皮": 357,
+        "鐵": 357,
+        "韌皮": 26,
+        "精鐵": 26
       },
       "tier": 5,
       "population": [
@@ -424,10 +424,10 @@
       "name": "魏武銳士",
       "image": "assets/soldier/5_weiwuruishi.png",
       "materials": {
-        "皮": 666,
-        "鐵": 666,
-        "韌皮": 36,
-        "精鐵": 36
+        "皮": 333,
+        "鐵": 333,
+        "韌皮": 24,
+        "精鐵": 24
       },
       "tier": 5,
       "population": [
@@ -439,8 +439,8 @@
       "name": "黃巾浮水團",
       "image": "assets/soldier/3.5_huangjinfushuituan.png",
       "materials": {
-        "皮": 142,
-        "鐵": 142
+        "皮": 71,
+        "鐵": 71
       },
       "tier": 3.5,
       "population": [
