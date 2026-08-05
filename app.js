@@ -469,8 +469,15 @@ function applyView() {
   }
 
   for (const row of popList.children) {
-    row.classList.remove("active");
-    if (popFilter && row.dataset.popId === popFilter) row.classList.add("active");
+    row.classList.remove("active", "available");
+    if (state.selectedMarkerId) {
+      const m = state.markers.find((x) => x.id === state.selectedMarkerId);
+      if (m && m.population && m.population.includes(row.dataset.popId)) row.classList.add("available");
+    }
+    if (popFilter && row.dataset.popId === popFilter) {
+      row.classList.remove("available");
+      row.classList.add("active");
+    }
   }
 
   if (inactiveFilter) {

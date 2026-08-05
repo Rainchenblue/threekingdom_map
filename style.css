@@ -657,6 +657,11 @@ body.mode-craft #resourcesLayer { visibility: hidden; }
   background: rgba(74, 144, 217, 0.15);
 }
 
+.pop-row.available {
+  border-color: var(--green);
+  background: rgba(76, 175, 114, 0.08);
+}
+
 .pop-row .pop-img {
   width: 100%;
   height: auto;
