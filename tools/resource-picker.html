@@ -26,7 +26,8 @@
   .marker { position: absolute; width: 0; height: 0; }
   .marker .dot { position: absolute; width: 12px; height: 12px; border-radius: 50%;
                  border: 2px solid #fff; transform: translate(-50%, -50%);
-                 cursor: grab; box-shadow: 0 0 4px rgba(0,0,0,.8); }
+                 cursor: grab; box-shadow: 0 0 4px rgba(0,0,0,.8); overflow: hidden; }
+  .marker .dot img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; pointer-events: none; }
   .marker .dot:hover { filter: brightness(1.3); }
   .marker.drag .dot { cursor: grabbing; outline: 2px solid #ffeb3b; }
   .marker .label { position: absolute; left: 9px; top: -15px; white-space: nowrap; font-size: 12px;
@@ -142,14 +143,14 @@
 
 <script>
 const TYPES = [
-  { id: 'pi',       name: '皮',   color: '#a1887f' },
-  { id: 'tie',      name: '鐵',   color: '#90a4ae' },
-  { id: 'shi',      name: '石',   color: '#9e9e9e' },
-  { id: 'mu',       name: '木',   color: '#5d4037' },
-  { id: 'liang',    name: '糧',   color: '#ffb74d' },
-  { id: 'ma',       name: '馬',   color: '#b39ddb' },
-  { id: 'yizhan',   name: '驛站', color: '#4db6ac' },
-  { id: 'guankou',  name: '關口', color: '#ef5350' }
+  { id: 'pi',       name: '皮',   color: '#a1887f', image: '../assets/res-points/pi.png' },
+  { id: 'tie',      name: '鐵',   color: '#90a4ae', image: '../assets/res-points/tie.png' },
+  { id: 'shi',      name: '石',   color: '#9e9e9e', image: '../assets/res-points/shi.png' },
+  { id: 'mu',       name: '木',   color: '#5d4037', image: '../assets/res-points/mu.png' },
+  { id: 'liang',    name: '糧',   color: '#ffb74d', image: '../assets/res-points/liang.png' },
+  { id: 'ma',       name: '馬',   color: '#b39ddb', image: '../assets/res-points/ma.png' },
+  { id: 'yizhan',   name: '驛站', color: '#ffffff', image: '../assets/res-points/yizhan.png' },
+  { id: 'guankou',  name: '關口', color: '#ef5350', image: '../assets/res-points/guankou.png' }
 ];
 const TYPE_BY_ID = Object.fromEntries(TYPES.map(t => [t.id, t]));
 const LEVELS = [
@@ -261,6 +262,14 @@ function renderMarker(m) {
   dot.className = 'dot';
   dot.style.background = t.color;
   dot.style.borderColor = lv.color;
+  if (t.image) {
+    const im = document.createElement('img');
+    im.src = t.image;
+    im.alt = t.name;
+    im.draggable = false;
+    im.addEventListener('error', () => im.remove());
+    dot.appendChild(im);
+  }
   const label = document.createElement('div');
   label.className = 'label';
   label.style.background = 'rgba(0,0,0,.65)';

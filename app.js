@@ -60,14 +60,14 @@ const RES_ICON = {
 };
 
 const RESOURCE_TYPES = [
-  { id: "pi", name: "皮", color: "#a1887f" },
-  { id: "tie", name: "鐵", color: "#90a4ae" },
-  { id: "shi", name: "石", color: "#9e9e9e" },
-  { id: "mu", name: "木", color: "#5d4037" },
-  { id: "liang", name: "糧", color: "#ffb74d" },
-  { id: "ma", name: "馬", color: "#b39ddb" },
-  { id: "yizhan", name: "驛站", color: "#4db6ac" },
-  { id: "guankou", name: "關口", color: "#ef5350" },
+  { id: "pi", name: "皮", color: "#a1887f", image: "assets/res-points/pi.png" },
+  { id: "tie", name: "鐵", color: "#90a4ae", image: "assets/res-points/tie.png" },
+  { id: "shi", name: "石", color: "#9e9e9e", image: "assets/res-points/shi.png" },
+  { id: "mu", name: "木", color: "#5d4037", image: "assets/res-points/mu.png" },
+  { id: "liang", name: "糧", color: "#ffb74d", image: "assets/res-points/liang.png" },
+  { id: "ma", name: "馬", color: "#b39ddb", image: "assets/res-points/ma.png" },
+  { id: "yizhan", name: "驛站", color: "#ffffff", image: "assets/res-points/yizhan.png" },
+  { id: "guankou", name: "關口", color: "#ef5350", image: "assets/res-points/guankou.png" },
 ];
 
 const LEVEL_COLORS = {
@@ -274,6 +274,15 @@ function renderResources() {
     const inner = document.createElement("div");
     inner.className = "res-inner";
     inner.style.background = t.color;
+    if (t.image) {
+      const im = document.createElement("img");
+      im.className = "res-img";
+      im.src = t.image;
+      im.alt = t.name;
+      im.draggable = false;
+      im.addEventListener("error", () => im.remove());
+      inner.appendChild(im);
+    }
 
     const label = document.createElement("div");
     label.className = "res-label";
