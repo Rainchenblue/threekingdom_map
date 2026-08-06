@@ -81,8 +81,8 @@ body.mode-craft #resourcesLayer { visibility: hidden; }
 
 .res-point {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   cursor: pointer;
@@ -93,7 +93,7 @@ body.mode-craft #resourcesLayer { visibility: hidden; }
 .res-point::before {
   content: "";
   position: absolute;
-  inset: -3px;
+  inset: -4px;
   border-radius: 50%;
   border: 2px solid var(--lv-color, #fff);
   pointer-events: none;
@@ -229,8 +229,8 @@ body.mode-craft #resourcesLayer { visibility: hidden; }
 
 .res-point {
   position: absolute;
-  width: 12px;
-  height: 12px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   cursor: pointer;
@@ -241,7 +241,7 @@ body.mode-craft #resourcesLayer { visibility: hidden; }
 .res-point::before {
   content: "";
   position: absolute;
-  inset: -3px;
+  inset: -4px;
   border-radius: 50%;
   border: 2px solid var(--lv-color, #fff);
   pointer-events: none;
