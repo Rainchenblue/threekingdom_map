@@ -66,8 +66,8 @@ const RESOURCE_TYPES = [
   { id: "mu", name: "木", color: "#5d4037", image: "assets/res-points/mu.png" },
   { id: "liang", name: "糧", color: "#ffb74d", image: "assets/res-points/liang.png" },
   { id: "ma", name: "馬", color: "#b39ddb", image: "assets/res-points/ma.png" },
-  { id: "yizhan", name: "驛站", color: "#ffffff", image: "assets/res-points/yizhan.png" },
-  { id: "guankou", name: "關口", color: "#ef5350", image: "assets/res-points/guankou.png" },
+  { id: "yizhan", name: "驛站", color: "#ffffff" },
+  { id: "guankou", name: "關口", color: "#ef5350" },
 ];
 
 const LEVEL_COLORS = {
