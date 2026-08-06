@@ -744,6 +744,13 @@ mapWrap.addEventListener("click", (e) => {
 resetBtn.addEventListener("click", () => {
   clearSelection();
   clearFilter();
+  if (state.mode === "resource") {
+    state.visited = {};
+    saveVisited();
+    for (const el of resourcesLayer.children) {
+      el.classList.remove("visited");
+    }
+  }
 });
 
 dpCloseBtn.addEventListener("click", () => {
