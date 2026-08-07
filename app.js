@@ -10,6 +10,7 @@ const state = {
   markers: [],
   resources: [],
   resourceVisible: {},
+  levelVisible: {},
   selectedMarkerId: null,
   activeFilter: null,
   activePopulation: null,
@@ -28,6 +29,7 @@ const mapWrap = document.getElementById("mapWrap");
 const markersLayer = document.getElementById("markersLayer");
 const resourcesLayer = document.getElementById("resourcesLayer");
 const resTypeBtns = document.getElementById("resTypeBtns");
+const resLevelBtns = document.getElementById("resLevelBtns");
 const itemList = document.getElementById("itemList");
 const popList = document.getElementById("popList");
 const horseList = document.getElementById("horseList");
@@ -133,6 +135,7 @@ async function init() {
     renderMarkers();
     renderResources();
     buildResTypeBtns();
+    buildResLevelBtns();
     applyView();
     renderPanel();
     initModeSwitch();
@@ -331,6 +334,7 @@ function renderResources() {
     div.className = "res-point" + (state.visited[r.id] ? " visited" : "");
     div.dataset.resId = r.id;
     div.dataset.resType = r.type;
+    div.dataset.resLevel = lv;
     div.style.left = r.x + "%";
     div.style.top = r.y + "%";
     div.style.setProperty("--lv-color", lvColor);
@@ -381,13 +385,57 @@ function buildResTypeBtns() {
   applyResourceVisibility();
 }
 
+function buildResLevelBtns() {
+  resLevelBtns.innerHTML = "";
+  const all = document.createElement("button");
+  all.dataset.level = "all";
+  all.textContent = "全部";
+  all.addEventListener("click", () => {
+    for (const k of Object.keys(state.levelVisible)) state.levelVisible[k] = true;
+    applyResourceVisibility();
+  });
+  resLevelBtns.appendChild(all);
+  for (let lv = 1; lv <= 4; lv++) {
+    if (state.levelVisible[lv] === undefined) state.levelVisible[lv] = true;
+    const b = document.createElement("button");
+    b.dataset.level = String(lv);
+    b.innerHTML = '<span class="lv-dot" style="background:' + (LEVEL_COLORS[lv] || "#ffffff") + '"></span>Lv.' + lv;
+    b.addEventListener("click", () => {
+      state.levelVisible[lv] = !state.levelVisible[lv];
+      applyResourceVisibility();
+    });
+    resLevelBtns.appendChild(b);
+  }
+  applyLevelBtnStates();
+}
+
+function applyLevelBtnStates() {
+  for (const b of resLevelBtns.children) {
+    if (b.dataset.level === "all") {
+      const allOn = [1, 2, 3, 4].every((lv) => !!state.levelVisible[lv]);
+      b.classList.toggle("on", allOn);
+      b.classList.toggle("off", !allOn);
+    } else {
+      const on = !!state.levelVisible[Number(b.dataset.level)];
+      b.classList.toggle("on", on);
+      b.classList.toggle("off", !on);
+    }
+  }
+}
+
 function applyResourceVisibility() {
   for (const b of resTypeBtns.children) {
     b.classList.toggle("on", !!state.resourceVisible[b.dataset.type]);
     b.classList.toggle("off", !state.resourceVisible[b.dataset.type]);
   }
+  applyLevelBtnStates();
   for (const el of resourcesLayer.children) {
-    el.style.display = state.resourceVisible[el.dataset.resType] ? "" : "none";
+    let show = !!state.resourceVisible[el.dataset.resType];
+    if (show && el.dataset.resType !== "yizhan" && el.dataset.resType !== "guankou") {
+      const lv = Number(el.dataset.resLevel) || 1;
+      if (!state.levelVisible[lv]) show = false;
+    }
+    el.style.display = show ? "" : "none";
   }
 }
 

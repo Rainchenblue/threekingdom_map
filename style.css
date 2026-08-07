@@ -357,6 +357,40 @@ body.mode-craft #resourcesLayer { visibility: hidden; }
   flex-shrink: 0;
 }
 
+.res-level-title { margin-top: 6px; }
+
+.res-level-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.res-level-btns button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.res-level-btns button:hover { border-color: var(--gold); }
+
+.res-level-btns button.on { border-color: var(--gold); }
+.res-level-btns button.off { opacity: 0.45; }
+
+.res-level-btns .lv-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
 .marker {
   position: absolute;
   transform: translate(-50%, -100%);
