@@ -184,6 +184,9 @@
       "tier": 3,
       "population": [
         "biandixiaoyong"
+      ],
+      "horse": [
+        "junma"
       ]
     },
     {
@@ -199,6 +202,9 @@
       "tier": 4.5,
       "population": [
         "shuzhongjingzhuang"
+      ],
+      "horse": [
+        "junma"
       ]
     },
     {
@@ -275,6 +281,9 @@
       "tier": 5,
       "population": [
         "zhongyuanzhuangding"
+      ],
+      "horse": [
+        "liangma"
       ]
     },
     {
