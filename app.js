@@ -5,12 +5,15 @@ const state = {
   itemsById: {},
   populations: [],
   populationsById: {},
+  horses: [],
+  horsesById: {},
   markers: [],
   resources: [],
   resourceVisible: {},
   selectedMarkerId: null,
   activeFilter: null,
   activePopulation: null,
+  activeHorse: null,
   zoom: 1,
   baseW: null,
   qty: 1,
@@ -27,6 +30,7 @@ const resourcesLayer = document.getElementById("resourcesLayer");
 const resTypeBtns = document.getElementById("resTypeBtns");
 const itemList = document.getElementById("itemList");
 const popList = document.getElementById("popList");
+const horseList = document.getElementById("horseList");
 const dpName = document.getElementById("dpName");
 const dpItems = document.getElementById("dpItems");
 const dpTotals = document.getElementById("dpTotals");
@@ -98,29 +102,34 @@ init();
 
 async function init() {
   try {
-    const [itemsRes, markersRes, popsRes, resourcesRes] = await Promise.all([
+    const [itemsRes, markersRes, popsRes, resourcesRes, horsesRes] = await Promise.all([
       fetch("data/items.json"),
       fetch("data/markers.json"),
       fetch("data/populations.json"),
       fetch("data/resources.json"),
+      fetch("data/horses.json"),
     ]);
-    if (!itemsRes.ok || !markersRes.ok || !popsRes.ok || !resourcesRes.ok) throw new Error("資料載入失敗");
+    if (!itemsRes.ok || !markersRes.ok || !popsRes.ok || !resourcesRes.ok || !horsesRes.ok) throw new Error("資料載入失敗");
     const itemsData = await itemsRes.json();
     const markersData = await markersRes.json();
     const popsData = await popsRes.json();
     const resourcesData = await resourcesRes.json();
+    const horsesData = await horsesRes.json();
 
     state.items = itemsData.items;
     state.markers = markersData.markers;
     for (const it of state.items) state.itemsById[it.id] = it;
     state.populations = popsData.populations || [];
     for (const p of state.populations) state.populationsById[p.id] = p;
+    state.horses = horsesData.horses || [];
+    for (const h of state.horses) state.horsesById[h.id] = h;
     state.resources = resourcesData.resources || [];
 
     loadPlayerRes();
     loadVisited();
     renderSidebar();
     renderPopList();
+    renderHorseList();
     renderMarkers();
     renderResources();
     buildResTypeBtns();
@@ -218,6 +227,61 @@ function togglePopulation(popId) {
   const row = popList.querySelector('[data-pop-id="' + popId + '"]');
   if (row) {
     row.scrollIntoView({ block: "nearest" });
+    row.classList.remove("flash");
+    void row.offsetWidth;
+    row.classList.add("flash");
+  }
+  applyView();
+}
+
+function renderHorseList() {
+  horseList.innerHTML = "";
+  let list;
+  if (state.activeFilter) {
+    const it = state.itemsById[state.activeFilter];
+    const horseIds = it ? it.horse || [] : [];
+    if (horseIds.length === 0) {
+      const div = document.createElement("div");
+      div.className = "empty-hint";
+      div.textContent = "此兵團不需馬";
+      horseList.appendChild(div);
+      return;
+    }
+    list = horseIds.map((id) => state.horsesById[id]).filter(Boolean);
+  } else {
+    list = state.horses.slice();
+  }
+
+  if (list.length === 0) {
+    const div = document.createElement("div");
+    div.className = "empty-hint";
+    div.textContent = "馬資料待提供";
+    horseList.appendChild(div);
+    return;
+  }
+
+  for (const h of list) {
+    const li = document.createElement("div");
+    li.className = "horse-item";
+    li.dataset.horseId = h.id;
+    li.title = h.name;
+    const img = document.createElement("img");
+    img.className = "horse-img";
+    img.src = h.image;
+    img.alt = h.name;
+    li.appendChild(img);
+    li.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleHorse(h.id);
+    });
+    horseList.appendChild(li);
+  }
+}
+
+function toggleHorse(horseId) {
+  state.activeHorse = state.activeHorse === horseId ? null : horseId;
+  const row = horseList.querySelector('[data-horse-id="' + horseId + '"]');
+  if (row) {
     row.classList.remove("flash");
     void row.offsetWidth;
     row.classList.add("flash");
@@ -402,11 +466,19 @@ function isInactiveFilter() {
   return !!it && it.craftable === false;
 }
 
+function markerUsesHorse(m, horseId) {
+  return (m.items || []).some((id) => {
+    const it = state.itemsById[id];
+    return it && (it.horse || []).includes(horseId);
+  });
+}
+
 function matchCount() {
   const inactiveFilter = isInactiveFilter();
   return state.markers.filter((m) => {
     if (state.activeFilter && !inactiveFilter && !(m.items || []).includes(state.activeFilter)) return false;
     if (state.activePopulation && !(m.population || []).includes(state.activePopulation)) return false;
+    if (state.activeHorse && !markerUsesHorse(m, state.activeHorse)) return false;
     return true;
   }).length;
 }
@@ -430,6 +502,7 @@ function clearSelection() {
 function setFilter(itemId) {
   state.activeFilter = state.activeFilter === itemId ? null : itemId;
   state.activePopulation = null;
+  state.activeHorse = null;
   const row = itemList.querySelector('[data-item-id="' + itemId + '"]');
   if (row) {
     row.scrollIntoView({ block: "nearest" });
@@ -440,19 +513,23 @@ function setFilter(itemId) {
   applyView();
   renderPanel();
   renderPopList();
+  renderHorseList();
 }
 
 function clearFilter() {
   state.activeFilter = null;
   state.activePopulation = null;
+  state.activeHorse = null;
   applyView();
   renderPopList();
+  renderHorseList();
 }
 
 function applyView() {
   if (state.mode === "resource") return;
   const filter = state.activeFilter;
   const popFilter = state.activePopulation;
+  const horseFilter = state.activeHorse;
   const inactiveFilter = isInactiveFilter();
 
   for (const mEl of markersLayer.children) {
@@ -461,7 +538,8 @@ function applyView() {
     let isMatch = true;
     if (filter && !inactiveFilter && !(m.items || []).includes(filter)) isMatch = false;
     if (popFilter && !(m.population || []).includes(popFilter)) isMatch = false;
-    if ((filter && !inactiveFilter) || popFilter) {
+    if (horseFilter && !markerUsesHorse(m, horseFilter)) isMatch = false;
+    if ((filter && !inactiveFilter) || popFilter || horseFilter) {
       if (isMatch) mEl.classList.add("match");
       else mEl.classList.add("dim");
     }
@@ -469,8 +547,12 @@ function applyView() {
   }
 
   for (const row of itemList.children) {
-    row.classList.remove("active", "available");
+    row.classList.remove("active", "available", "horse-match");
     if (filter && row.dataset.itemId === filter) row.classList.add("active");
+    if (horseFilter && row.dataset.itemId) {
+      const it = state.itemsById[row.dataset.itemId];
+      if (it && (it.horse || []).includes(horseFilter)) row.classList.add("horse-match");
+    }
     if (state.selectedMarkerId) {
       const m = state.markers.find((x) => x.id === state.selectedMarkerId);
       if (m && m.items.includes(row.dataset.itemId)) row.classList.add("available");
@@ -487,6 +569,11 @@ function applyView() {
       row.classList.remove("available");
       row.classList.add("active");
     }
+  }
+
+  for (const row of horseList.children) {
+    row.classList.remove("active");
+    if (horseFilter && row.dataset.horseId === horseFilter) row.classList.add("active");
   }
 
   if (inactiveFilter) {
@@ -509,6 +596,10 @@ function applyView() {
   if (popFilter) {
     const p = state.populationsById[popFilter];
     parts.push("有「" + (p ? p.name : popFilter) + "」人口");
+  }
+  if (horseFilter) {
+    const h = state.horsesById[horseFilter];
+    parts.push("用「" + (h ? h.name : horseFilter) + "」馬");
   }
   if (parts.length) {
     statusEl.textContent = "高亮：" + parts.join("且") + "的據點（" + matchCount() + " 處）";

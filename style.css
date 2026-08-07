@@ -660,12 +660,63 @@ body.mode-craft #resourcesLayer { visibility: hidden; }
   min-height: 0;
 }
 
-.pop-list {
+.pop-col {
   width: 220px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--border);
+}
+
+.pop-list {
+  flex: 1 1 0;
+  min-height: 0;
   overflow: auto;
   padding: 10px;
-  border-right: 1px solid var(--border);
+}
+
+.horse-list {
+  flex-shrink: 0;
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid var(--border);
+  background: var(--panel-2);
+}
+
+.horse-item {
+  flex: 1 1 0;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.horse-item:hover { border-color: var(--purple); }
+
+.horse-item.active {
+  border-color: var(--purple);
+  background: rgba(154, 107, 209, 0.15);
+}
+
+.horse-item .horse-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+  background: #000;
+}
+
+.horse-list .empty-hint {
+  flex: 1;
+  color: var(--text-dim);
+  font-size: 13px;
+  text-align: center;
+  padding: 12px 6px;
+  cursor: default;
 }
 
 .pop-row {
@@ -750,7 +801,13 @@ body.mode-craft #resourcesLayer { visibility: hidden; }
   background: rgba(76, 175, 114, 0.08);
 }
 
+.item-row.horse-match {
+  border-color: var(--purple);
+  background: rgba(154, 107, 209, 0.12);
+}
+
 .item-row.flash { animation: flash 0.6s ease; }
+.horse-item.flash { animation: flash 0.6s ease; }
 @keyframes flash {
   0%, 100% { background: var(--panel-2); }
   50% { background: rgba(217, 164, 65, 0.35); }
@@ -768,7 +825,7 @@ body.mode-craft #resourcesLayer { visibility: hidden; }
   .map-wrap { width: 640px; min-width: 0; }
   .res-control { position: static; max-width: none; margin: 8px 10px 0; }
   .sidebar { width: 100%; border-left: none; border-top: 1px solid var(--border); }
-  .pop-list { max-height: 55vh; }
+  .pop-col { max-height: 55vh; }
   #itemList { max-height: 55vh; }
   .detail-panel {
     position: static;
