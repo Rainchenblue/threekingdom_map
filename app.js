@@ -466,19 +466,11 @@ function isInactiveFilter() {
   return !!it && it.craftable === false;
 }
 
-function markerUsesHorse(m, horseId) {
-  return (m.items || []).some((id) => {
-    const it = state.itemsById[id];
-    return it && (it.horse || []).includes(horseId);
-  });
-}
-
 function matchCount() {
   const inactiveFilter = isInactiveFilter();
   return state.markers.filter((m) => {
     if (state.activeFilter && !inactiveFilter && !(m.items || []).includes(state.activeFilter)) return false;
     if (state.activePopulation && !(m.population || []).includes(state.activePopulation)) return false;
-    if (state.activeHorse && !markerUsesHorse(m, state.activeHorse)) return false;
     return true;
   }).length;
 }
@@ -538,8 +530,7 @@ function applyView() {
     let isMatch = true;
     if (filter && !inactiveFilter && !(m.items || []).includes(filter)) isMatch = false;
     if (popFilter && !(m.population || []).includes(popFilter)) isMatch = false;
-    if (horseFilter && !markerUsesHorse(m, horseFilter)) isMatch = false;
-    if ((filter && !inactiveFilter) || popFilter || horseFilter) {
+    if ((filter && !inactiveFilter) || popFilter) {
       if (isMatch) mEl.classList.add("match");
       else mEl.classList.add("dim");
     }
@@ -597,12 +588,11 @@ function applyView() {
     const p = state.populationsById[popFilter];
     parts.push("有「" + (p ? p.name : popFilter) + "」人口");
   }
-  if (horseFilter) {
-    const h = state.horsesById[horseFilter];
-    parts.push("用「" + (h ? h.name : horseFilter) + "」馬");
-  }
   if (parts.length) {
     statusEl.textContent = "高亮：" + parts.join("且") + "的據點（" + matchCount() + " 處）";
+  } else if (horseFilter) {
+    const h = state.horsesById[horseFilter];
+    statusEl.textContent = "高亮：使用「" + (h ? h.name : horseFilter) + "」馬的兵團";
   } else {
     statusEl.textContent = "點擊左側兵裝可高亮對應據點，點擊據點查看兵裝與材料";
   }
