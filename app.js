@@ -913,6 +913,15 @@ dpCloseBtn.addEventListener("click", () => {
 });
 
 qtyInput.addEventListener("input", () => {
+  const v = parseInt(qtyInput.value, 10);
+  if (!isNaN(v) && v >= 1) {
+    state.qty = v;
+    qtyInput.value = v;
+    renderPanel();
+  }
+});
+
+qtyInput.addEventListener("change", () => {
   let v = parseInt(qtyInput.value, 10);
   if (isNaN(v) || v < 1) v = 1;
   state.qty = v;
