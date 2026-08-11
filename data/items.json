@@ -11,7 +11,8 @@
       "tier": 3,
       "population": [
         "xiangyong"
-      ]
+      ],
+      "unlock": "系統給予"
     },
     {
       "id": "yuanrongnubing",
@@ -26,7 +27,8 @@
       "tier": 4,
       "population": [
         "shuzhongjingzhuang"
-      ]
+      ],
+      "unlock": "持有\"黃忠\"、\"夏侯淵\""
     },
     {
       "id": "xiandengsishi",
@@ -41,7 +43,8 @@
       "tier": 4.5,
       "population": [
         "hebeizhuangshi"
-      ]
+      ],
+      "unlock": "\"關羽\"20%、\"顏良\"20%"
     },
     {
       "id": "jizhoudajishi",
@@ -56,7 +59,8 @@
       "tier": 4,
       "population": [
         "hebeizhuangshi"
-      ]
+      ],
+      "unlock": "\"顏良\"60%"
     },
     {
       "id": "dahanyulinjun",
@@ -71,7 +75,8 @@
       "tier": 5,
       "population": [
         "jiangdongyiyong"
-      ]
+      ],
+      "unlock": "\"劉備\"40%、\"孫尚香\"40%"
     },
     {
       "id": "bingzhouchiji",
@@ -89,7 +94,8 @@
       ],
       "horse": [
         "liangma"
-      ]
+      ],
+      "unlock": "\"呂布\"20%、\"劉備\"20%"
     },
     {
       "id": "elaiying",
@@ -104,7 +110,8 @@
       "tier": 4.5,
       "population": [
         "zhongyuanzhuangding"
-      ]
+      ],
+      "unlock": "\"典韋\"80%"
     },
     {
       "id": "fanchengtiewei",
@@ -117,7 +124,8 @@
       "tier": 3,
       "population": [
         "jiangdongyiyong"
-      ]
+      ],
+      "unlock": "持有\"關羽\""
     },
     {
       "id": "hengjiangsheshi",
@@ -130,7 +138,8 @@
       "tier": 3,
       "population": [
         "jiangdongyiyong"
-      ]
+      ],
+      "unlock": "\"孫堅\"60%"
     },
     {
       "id": "jiangdongfeishuo",
@@ -143,7 +152,8 @@
       "tier": 3,
       "population": [
         "jiangdongyiyong"
-      ]
+      ],
+      "unlock": "持有\"孫策\""
     },
     {
       "id": "heshuoqiangnuwei",
@@ -158,7 +168,8 @@
       "tier": 5,
       "population": [
         "hebeizhuangshi"
-      ]
+      ],
+      "unlock": ""
     },
     {
       "id": "bohaiqiangwei",
@@ -171,7 +182,8 @@
       "tier": 3,
       "population": [
         "qingxuyishi"
-      ]
+      ],
+      "unlock": "持有\"甄姬\""
     },
     {
       "id": "wuhuanlangqi",
@@ -187,7 +199,8 @@
       ],
       "horse": [
         "junma"
-      ]
+      ],
+      "unlock": "造訪\"南皮\"的\"東平石山\""
     },
     {
       "id": "wudangfeijun",
@@ -205,7 +218,8 @@
       ],
       "horse": [
         "junma"
-      ]
+      ],
+      "unlock": "\"魏延\"60%"
     },
     {
       "id": "baierbing",
@@ -220,7 +234,8 @@
       "tier": 5,
       "population": [
         "shuzhongjingzhuang"
-      ]
+      ],
+      "unlock": "\"劉備\"40%、持有\"曹操\""
     },
     {
       "id": "baimayicong",
@@ -238,7 +253,8 @@
       ],
       "horse": [
         "liangma"
-      ]
+      ],
+      "unlock": "\"趙雲\"40%、\"劉備\"40%"
     },
     {
       "id": "tengjiabing",
@@ -251,7 +267,8 @@
       "tier": 3.5,
       "population": [
         "shuzhongjingzhuang"
-      ]
+      ],
+      "unlock": "英雄志-志在四方完成度6獎勵"
     },
     {
       "id": "huweijun",
@@ -266,7 +283,8 @@
       "tier": 4,
       "population": [
         "zhongyuanzhuangding"
-      ]
+      ],
+      "unlock": "\"典韋\"20%、持有\"曹操\""
     },
     {
       "id": "hubaoji",
@@ -284,7 +302,8 @@
       ],
       "horse": [
         "liangma"
-      ]
+      ],
+      "unlock": "\"曹操\"40%、\"典韋\"40%、\"夏侯淵\"40%"
     },
     {
       "id": "xiliangtieqi",
@@ -302,7 +321,8 @@
       ],
       "horse": [
         "junma"
-      ]
+      ],
+      "unlock": "英雄志-破關斬將完成度6獎勵"
     },
     {
       "id": "jiefanbing",
@@ -317,7 +337,8 @@
       "tier": 5,
       "population": [
         "jiangdongyiyong"
-      ]
+      ],
+      "unlock": "\"孫策\"80%"
     },
     {
       "id": "jiefanhuobu",
@@ -332,7 +353,8 @@
       "tier": 4.5,
       "population": [
         "jiangdongyiyong"
-      ]
+      ],
+      "unlock": "\"孫策\"40%"
     },
     {
       "id": "qiaoruiwei",
@@ -347,7 +369,8 @@
       "tier": 4,
       "population": [
         "zhongyuanzhuangding"
-      ]
+      ],
+      "unlock": "持有\"曹操\"、\"呂布\""
     },
     {
       "id": "meiwuhuogongshou",
@@ -362,7 +385,8 @@
       "tier": 4,
       "population": [
         "biandixiaoyong"
-      ]
+      ],
+      "unlock": "新手簽到第二天"
     },
     {
       "id": "xianzhenying",
@@ -377,7 +401,8 @@
       "tier": 5,
       "population": [
         "qingxuyishi"
-      ]
+      ],
+      "unlock": "\"呂布\"40%、\"呂玲綺\"60%"
     },
     {
       "id": "yongliangfeixiongjun",
@@ -392,7 +417,8 @@
       "tier": 5,
       "population": [
         "biandixiaoyong"
-      ]
+      ],
+      "unlock": "英雄志-風雲際會完成度6獎勵"
     },
     {
       "id": "qingzhoubing",
@@ -405,7 +431,8 @@
       "tier": 3.5,
       "population": [
         "qingxuyishi"
-      ]
+      ],
+      "unlock": "持有\"曹操\""
     },
     {
       "id": "qinglongwei",
@@ -420,7 +447,8 @@
       "tier": 5,
       "population": [
         "zhongyuanzhuangding"
-      ]
+      ],
+      "unlock": "\"關羽\"60%"
     },
     {
       "id": "jinghanjun",
@@ -435,7 +463,8 @@
       "tier": 5,
       "population": [
         "shuzhongjingzhuang"
-      ]
+      ],
+      "unlock": "\"關羽\"40%"
     },
     {
       "id": "weiwuruishi",
@@ -450,7 +479,8 @@
       "tier": 5,
       "population": [
         "zhongyuanzhuangding"
-      ]
+      ],
+      "unlock": "\"曹操\"40%、持有\"甄姬\""
     },
     {
       "id": "huangjinfushuituan",
@@ -463,7 +493,8 @@
       "tier": 3.5,
       "population": [
         "xiangyong"
-      ]
+      ],
+      "unlock": "持有\"張角\""
     },
     {
       "id": "daopaishou",
@@ -474,7 +505,8 @@
       "tier": 2,
       "population": [
         "xiangyong"
-      ]
+      ],
+      "unlock": "系統給予"
     },
     {
       "id": "gongjiangtuan",
@@ -485,7 +517,8 @@
       "tier": 2,
       "population": [
         "xiangyong"
-      ]
+      ],
+      "unlock": "新手簽到第四天"
     },
     {
       "id": "gongjianwei",
@@ -496,7 +529,8 @@
       "tier": 1,
       "population": [
         "xiangyong"
-      ]
+      ],
+      "unlock": "系統給予"
     },
     {
       "id": "nuwei",
@@ -507,7 +541,8 @@
       "tier": 2,
       "population": [
         "xiangyong"
-      ]
+      ],
+      "unlock": "系統給予"
     },
     {
       "id": "caiyaodui",
@@ -518,7 +553,8 @@
       "tier": 2,
       "population": [
         "xiangyong"
-      ]
+      ],
+      "unlock": "官方充值回饋禮560金錠第一天給予"
     },
     {
       "id": "tuqiying",
@@ -532,7 +568,8 @@
       ],
       "horse": [
         "junma"
-      ]
+      ],
+      "unlock": "系統給予"
     },
     {
       "id": "changqiangying",
@@ -543,7 +580,8 @@
       "tier": 1,
       "population": [
         "xiangyong"
-      ]
+      ],
+      "unlock": "系統給予"
     }
   ]
 }

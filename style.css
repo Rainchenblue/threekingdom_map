@@ -551,6 +551,25 @@ body.mode-craft #resourcesLayer { visibility: hidden; }
 .detail-panel .dp-item .row1 { margin-bottom: 5px; }
 .detail-panel .dp-item .row1 .iname { font-size: 13px; font-weight: 700; }
 
+.detail-panel .dp-unlock {
+  padding: 7px 9px;
+  border: 1px solid rgba(154, 107, 209, 0.5);
+  border-radius: 6px;
+  margin-bottom: 5px;
+  background: rgba(154, 107, 209, 0.08);
+}
+.detail-panel .dp-unlock .dp-unlock-label {
+  font-size: 11px;
+  color: var(--purple);
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+.detail-panel .dp-unlock .dp-unlock-text {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
 .detail-panel .dp-section {
   padding: 7px 12px;
   border-top: 1px solid var(--border);

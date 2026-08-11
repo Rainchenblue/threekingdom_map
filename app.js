@@ -701,6 +701,19 @@ function renderPanel() {
     row.appendChild(row1);
     row.appendChild(mats);
     dpItems.appendChild(row);
+    if (it.unlock) {
+      const urow = document.createElement("div");
+      urow.className = "dp-unlock";
+      const ulabel = document.createElement("div");
+      ulabel.className = "dp-unlock-label";
+      ulabel.textContent = "解鎖方式";
+      const utxt = document.createElement("div");
+      utxt.className = "dp-unlock-text";
+      utxt.textContent = it.unlock;
+      urow.appendChild(ulabel);
+      urow.appendChild(utxt);
+      dpItems.appendChild(urow);
+    }
     dpTotals.innerHTML = "";
     for (const mat of RES_ORDER) {
       if (!(mat in totals)) continue;
@@ -757,6 +770,19 @@ function renderPanel() {
       setFilter(it.id);
     });
     dpItems.appendChild(row);
+    if (canCraft.length === 1 && it.unlock) {
+      const urow = document.createElement("div");
+      urow.className = "dp-unlock";
+      const ulabel = document.createElement("div");
+      ulabel.className = "dp-unlock-label";
+      ulabel.textContent = "解鎖方式";
+      const utxt = document.createElement("div");
+      utxt.className = "dp-unlock-text";
+      utxt.textContent = it.unlock;
+      urow.appendChild(ulabel);
+      urow.appendChild(utxt);
+      dpItems.appendChild(urow);
+    }
   }
 
   dpTotals.innerHTML = "";
