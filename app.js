@@ -406,7 +406,7 @@ function buildResLevelBtns() {
     });
     resLevelBtns.appendChild(b);
   }
-  applyLevelBtnStates();
+  applyResourceVisibility();
 }
 
 function applyLevelBtnStates() {
